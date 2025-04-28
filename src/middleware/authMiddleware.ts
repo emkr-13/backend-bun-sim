@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { sendResponse } from "../utils/responseHelper";
+import logger from "../utils/logger"; // Import logger
 
 export const authenticate = (
   req: Request,
@@ -11,6 +12,7 @@ export const authenticate = (
 
   if (!token) {
     sendResponse(res, 401, "Access denied");
+    logger.error("Access denied: No token provided");
     return;
   }
 
@@ -19,6 +21,7 @@ export const authenticate = (
     (req as any).user = decoded;
     next();
   } catch (error) {
-    sendResponse(res, 400, "Invalid token");
+    logger.error("Invalid token:", error);
+    sendResponse(res, 400, "Invalid token",error);
   }
 };
