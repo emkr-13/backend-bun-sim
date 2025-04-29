@@ -1,4 +1,4 @@
-# Backend Bun Sim
+# Backend Bun Sistem Informasi Manajemen Inventory (SIM)
 
 This project is a backend application built using Bun, Express, and Drizzle ORM. It uses PostgreSQL as the database and supports JWT-based authentication.
 
