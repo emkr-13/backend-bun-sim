@@ -11,7 +11,7 @@ export const createAkun = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { name, contactInfo, phone, email, address, type } = req.body;
+    const { name, phone, email, address, type } = req.body;
 
     // Validasi input
     if (!name) {
@@ -48,7 +48,7 @@ export const createAkun = async (
     // Insert akun baru ke database
     const newAkun = await db.insert(akuns).values({
       name,
-      contactInfo,
+  
       phone,
       email,
       address,
@@ -66,7 +66,7 @@ export const updateAkun = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { id, name, contactInfo, phone, email, address, type } = req.body;
+    const { id, name, phone, email, address, type } = req.body;
 
     // Validasi input
     if (!id) {
@@ -101,7 +101,6 @@ export const updateAkun = async (
       .update(akuns)
       .set({
         name,
-        contactInfo,
         phone,
         email,
         address,

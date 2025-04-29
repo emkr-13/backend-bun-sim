@@ -1,28 +1,65 @@
-# Backend Bun Sistem Informasi Manajemen Inventory (SIM) di gudang dan to ke toko
+# Warehouse and Store Inventory Management System Backend
 
-This project is a backend application built using Bun, Express, and Drizzle ORM. It uses PostgreSQL as the database and supports JWT-based authentication.
+A robust backend system built with modern technologies for managing inventory between warehouses and stores.
 
-## Installation
+## Tech Stack
 
-To install dependencies, run:
+- **Runtime**: Bun v1.2.4+
+- **Framework**: Express.js
+- **Database**: PostgreSQL
+- **ORM**: Drizzle ORM
+- **Authentication**: JWT
+
+## Prerequisites
+
+- Bun 1.2.4 or higher
+- PostgreSQL 12 or higher
+- Node.js 16 or higher
+
+## Project Setup
+
+1. Clone the repository
+2. Create environment file:
+
+```bash
+cp .env.example .env
+```
+
+3. Configure environment variables:
+
+```env
+PORT=3000                    # Application port
+DATABASE_URL=postgres://username:password@localhost:5432/database_name
+JWT_SECRET=your_jwt_secret_key
+```
+
+4. Install dependencies:
 
 ```bash
 bun install
 ```
 
-## Running Migrations and Seeders
+## Database Setup
 
-To run database migration :
+1. Create database:
+
+```bash
+createdb database_name
+```
+
+2. Generate migration files:
 
 ```bash
 bun run drizzle-kit generate
 ```
 
+3. Apply migrations:
+
 ```bash
 bun run drizzle-kit push
 ```
 
-To run seeders (if applicable) tergantung isi dari Folder seeders:
+4. (Optional) Run seeders:
 
 ```bash
 bun run src/seeders/userSeeder.ts
@@ -30,10 +67,19 @@ bun run src/seeders/userSeeder.ts
 
 ## Running the Application
 
-To start the application in development mode:
+Development mode:
 
 ```bash
 bun run dev
 ```
 
-This project was created using `bun init` in bun v1.2.4. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+Production mode:
+
+```bash
+bun run start
+```
+
+
+## License
+
+MIT License
