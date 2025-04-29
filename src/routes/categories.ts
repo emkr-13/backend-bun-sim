@@ -5,6 +5,7 @@ import {
   createCategory,
   updateCategory,
   deleteCategory,
+  detailCategory
 } from "../controllers/categoriesController";
 
 const router = Router();
@@ -17,5 +18,8 @@ router.post("/create", authenticate, createCategory);
 router.post("/update", authenticate, updateCategory);
 // // Rute untuk menghapus kategori
 router.post("/delete", authenticate, deleteCategory);
+
+router.post("/detail", authenticate, detailCategory);
+
 
 export default router;

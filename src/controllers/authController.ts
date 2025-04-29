@@ -69,12 +69,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       sendResponse(res, 500, "Failed to update refresh token");
       return;
     }
-
+    logger.info("Login successful for user: ", user.email);
     sendResponse(res, 200, "Login successful", {
       token: authToken,
       refreshToken,
     });
-    logger.info("Login successful for user:", user.email);
   } catch (error) {
     logger.error("Unexpected error during login:", error);
     sendResponse(res, 500, "An unexpected error occurred", error);

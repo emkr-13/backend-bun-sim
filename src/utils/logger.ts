@@ -34,7 +34,7 @@ const logger = pino(
   {
     level: "info", // Default log level
     base: null, // Disable default metadata (hostname, pid)
-    timestamp: () => `,"time":"${new Date().toISOString()}"`, // Customize timestamp
+    timestamp: () => `,"time":"${new Date().toISOString()}"`, 
   },
   multistream(streams) // Use multistream to combine streams
 );
