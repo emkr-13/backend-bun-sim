@@ -7,8 +7,8 @@ import {
   pgEnum,
 } from "drizzle-orm/pg-core";
 import { products } from "./products";
-import { suppliers } from "./suppliers";
-import { departments } from "./departments";
+import { akuns } from "./akun";
+import { store } from "./store";
 
 export const movementType = pgEnum("movement_type", ["in", "out"]);
 export const stockMovements = pgTable("stock_movements", {
@@ -18,10 +18,11 @@ export const stockMovements = pgTable("stock_movements", {
     .notNull(),
   movementType: movementType("movement_type").notNull(),
   quantity: integer("quantity").notNull(),
-  supplierId: integer("supplier_id").references(() => suppliers.id, {
+  note: varchar("note", { length: 255 }),
+  akunId: integer("akun_id").references(() => akuns.id, {
     onDelete: "restrict",
   }),
-  departmentId: integer("department_id").references(() => departments.id, {
+  storeId: integer("store_id").references(() => store.id, {
     onDelete: "restrict",
   }),
 

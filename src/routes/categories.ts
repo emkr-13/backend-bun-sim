@@ -1,25 +1,23 @@
 import { Router } from "express";
-import { authenticate } from "../middleware/authMiddleware";
 import {
   listCategories,
   createCategory,
   updateCategory,
   deleteCategory,
-  detailCategory
+  detailCategory,
 } from "../controllers/categoriesController";
 
 const router = Router();
 
 // Rute untuk mendapatkan daftar kategori
-router.get("/all", authenticate, listCategories);
+router.get("/all", listCategories);
 // // Rute untuk membuat kategori baru
-router.post("/create", authenticate, createCategory);
+router.post("/create", createCategory);
 // // Rute untuk memperbarui kategori
-router.post("/update", authenticate, updateCategory);
+router.post("/update", updateCategory);
 // // Rute untuk menghapus kategori
-router.post("/delete", authenticate, deleteCategory);
+router.post("/delete", deleteCategory);
 
-router.post("/detail", authenticate, detailCategory);
-
+router.post("/detail", detailCategory);
 
 export default router;

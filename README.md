@@ -1,4 +1,4 @@
-# Backend Bun Sistem Informasi Manajemen Inventory (SIM)
+# Backend Bun Sistem Informasi Manajemen Inventory (SIM) di gudang dan to ke toko
 
 This project is a backend application built using Bun, Express, and Drizzle ORM. It uses PostgreSQL as the database and supports JWT-based authentication.
 
@@ -22,7 +22,7 @@ bun run drizzle-kit generate
 bun run drizzle-kit push
 ```
 
-To run seeders (if applicable):
+To run seeders (if applicable) tergantung isi dari Folder seeders:
 
 ```bash
 bun run src/seeders/userSeeder.ts
