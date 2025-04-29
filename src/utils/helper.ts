@@ -62,80 +62,57 @@ async function generateRefreshToken(payload: object): Promise<JwtResponse> {
   }
 }
 
-/**
- * Menghitung paginasi untuk halaman tertentu.
- * @param total - Total jumlah data.
- * @param pagenum - Halaman saat ini.
- * @param limit - Jumlah data per halaman.
- * @returns Promise<PaginationResponse> - Objek yang berisi detail paginasi.
- */
+const DEFAULT_PAGE_SIZE = 10;
+const MAX_PAGE_NUMBERS = 5;
 
 async function pagination(
   total: number,
   pagenum: number,
-  limit: number
+  limit: number = DEFAULT_PAGE_SIZE
 ): Promise<PaginationResponse> {
   try {
-    let total_page = Math.ceil(total / limit);
-    let prev = pagenum - 1;
-    if (prev < 1) {
-      prev = 0;
+    // Validasi input
+    if (total < 0) throw new Error("Total tidak boleh negatif");
+    if (pagenum < 1) throw new Error("Halaman minimal 1");
+    if (limit < 1) throw new Error("Limit minimal 1");
+
+    const totalPages = Math.max(1, Math.ceil(total / limit));
+    const currentPage = Math.min(pagenum, totalPages);
+
+    // Hitung prev dan next
+    const prevPage = currentPage > 1 ? currentPage - 1 : 0;
+    const nextPage = currentPage < totalPages ? currentPage + 1 : 0;
+
+    // Hitung range halaman yang ditampilkan
+    let startPage = Math.max(1, currentPage - Math.floor(MAX_PAGE_NUMBERS / 2));
+    let endPage = Math.min(totalPages, startPage + MAX_PAGE_NUMBERS - 1);
+
+    // Adjust startPage if endPage is at maximum
+    if (endPage - startPage + 1 < MAX_PAGE_NUMBERS) {
+      startPage = Math.max(1, endPage - MAX_PAGE_NUMBERS + 1);
     }
-    let next = pagenum + 1;
-    if (next > total_page) {
-      next = 0;
-    }
-    let from = 1;
-    let to = total_page;
-    let to_page = pagenum - 2;
-    if (to_page > 0) {
-      from = to_page;
-    }
-    if (total_page >= 5) {
-      if (total_page > 0) {
-        to = 5 + to_page;
-        if (to > total_page) {
-          to = total_page;
-        }
-      } else {
-        to = 5;
-      }
-    }
-    let firstpage_istrue = false;
-    let lastpage_istrue = false;
-    let detail: number[] = [];
-    if (total_page > 1) {
-      for (let i = from; i <= to; i++) {
-        detail.push(i);
-      }
-      if (from !== 1) {
-        firstpage_istrue = true;
-      }
-      if (to !== total_page) {
-        lastpage_istrue = true;
-      }
-    }
-    let total_display = limit;
-    if (next === 0) {
-      if (total % limit !== 0) {
-        total_display = total % limit;
-      }
-      if (total_page < pagenum) {
-        total_display = 0;
-      }
-    }
-    const pagination: PaginationResponse = {
+
+    // Generate detail pages array
+    const detail = Array.from(
+      { length: endPage - startPage + 1 },
+      (_, i) => startPage + i
+    );
+
+    // Hitung total item yang ditampilkan di halaman terakhir
+    const totalDisplay =
+      currentPage === totalPages ? total - (totalPages - 1) * limit : limit;
+
+    return {
       total_data: total,
-      total_page: total_page,
-      total_display: total_display,
-      first_page: firstpage_istrue,
-      last_page: lastpage_istrue,
-      prev: prev,
-      current: pagenum,
-      next: next,
+      total_page: totalPages,
+      total_display: totalDisplay,
+      first_page: startPage > 1,
+      last_page: endPage < totalPages,
+      prev: prevPage,
+      current: currentPage,
+      next: nextPage,
       detail: detail,
     };
-    return pagination;
   } catch (err) {
     throw new Error((err as Error).message);
   }
