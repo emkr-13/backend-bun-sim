@@ -15,7 +15,7 @@ bun install
 To run database migration :
 
 ```bash
-bun run drizzle-kit migrate
+bun run drizzle-kit generate
 ```
 
 ```bash
