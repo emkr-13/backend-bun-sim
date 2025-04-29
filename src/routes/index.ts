@@ -3,13 +3,22 @@ import authRoutes from "./auth";
 import userRoutes from "./user";
 import categoriesRoutes from "./categories";
 import storeRoutes from "./store";
+import akunRoutes from "./akun";
 import { authenticate } from "../middleware/authMiddleware";
 
 const router = Router();
+const protectedRouter = Router();
 
+// Public routes
 router.use("/auth", authRoutes);
-router.use("/user", authenticate, userRoutes);
-router.use("/categories", authenticate, categoriesRoutes);
-router.use("/departments", authenticate, storeRoutes);
+
+// Protected routes
+protectedRouter.use("/user", userRoutes);
+protectedRouter.use("/categories", categoriesRoutes);
+protectedRouter.use("/store", storeRoutes);
+protectedRouter.use("/akun", akunRoutes);
+
+// Apply authentication middleware to all protected routes
+router.use(authenticate, protectedRouter);
 
 export default router;

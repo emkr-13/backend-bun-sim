@@ -205,7 +205,7 @@ export const listCategories = async (
     // Fetch the data for the current page
     const data = await query.limit(limit).offset((page - 1) * limit);
 
-    sendResponse(res, 200, "Authors retrieved successfully", {
+    sendResponse(res, 200, "Categories retrieved successfully", {
       data,
       pagination: paginationResult,
     });
