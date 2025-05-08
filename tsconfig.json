@@ -36,6 +36,8 @@
       "@models/*": ["models/*"],
       "@routes/*": ["routes/*"],
       "@controllers/*": ["controllers/*"],
+      "@repositories/*": ["repositories/*"],
+      "@services/*": ["services/*"],
       "@middleware/*": ["middleware/*"],
       "@seeders/*": ["seeders/*"],
       "@utils/*": ["utils/*"]

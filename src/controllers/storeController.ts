@@ -1,10 +1,11 @@
-import { db } from "../config/db";
-import { eq, sql, ilike, and, isNull, desc, asc } from "drizzle-orm";
-import { sendResponse } from "../utils/responseHelper";
 import { Request, Response } from "express";
-import { pagination } from "../utils/helper";
+import { sendResponse } from "../utils/responseHelper";
 import logger from "../utils/logger";
-import { store } from "../models/store";
+import { StoreService } from "../services/storeService";
+import { StoreRepository } from "../repositories/storeRepository";
+
+const storeRepository = new StoreRepository();
+const storeService = new StoreService(storeRepository);
 
 export const createStore = async (
   req: Request,
@@ -22,27 +23,7 @@ export const createStore = async (
       address,
     } = req.body;
 
-    // Validasi input
-    if (!name) {
-      sendResponse(res, 400, "name is required");
-      logger.error("Validation error: name is required");
-      return;
-    }
-
-    // Cek apakah store sudah ada
-    const existingstore = await db
-      .select()
-      .from(store)
-      .where(eq(store.name, name));
-
-    if (existingstore.length > 0) {
-      sendResponse(res, 409, "store already exists");
-      logger.error("store already exists");
-      return;
-    }
-
-    // Insert store baru ke database
-    const newstore = await db.insert(store).values({
+    await storeService.createStore({
       name,
       description,
       location,
@@ -53,11 +34,15 @@ export const createStore = async (
       address,
     });
 
-    sendResponse(res, 201, "store created successfully");
-    logger.info("store created successfully");
-  } catch (error) {
+    sendResponse(res, 201, "Store created successfully");
+  } catch (error: any) {
+    const statusCode = error.message.includes("required")
+      ? 400
+      : error.message.includes("already exists")
+      ? 409
+      : 500;
     logger.error("Error creating store:", error);
-    sendResponse(res, 500, "Internal server error");
+    sendResponse(res, statusCode, error.message);
   }
 };
 
@@ -66,8 +51,12 @@ export const updateStore = async (
   res: Response
 ): Promise<void> => {
   try {
+    const id = parseInt(req.body.id, 10);
+    if (isNaN(id)) {
+      throw new Error("Invalid ID format");
+    }
+
     const {
-      id,
       name,
       description,
       location,
@@ -77,107 +66,75 @@ export const updateStore = async (
       email,
       address,
     } = req.body;
-    // Validasi input
-    if (!id) {
-      sendResponse(res, 400, "id is required");
-      logger.error("Validation error: id is required");
-      return;
-    }
-    // cek apakah store sudah ada
-    const existingstore = await db.select().from(store).where(eq(store.id, id));
 
-    if (existingstore.length === 0) {
-      sendResponse(res, 404, "store not found");
-      logger.error("store not found");
-      return;
-    }
+    await storeService.updateStore(id, {
+      name,
+      description,
+      location,
+      manager,
+      contactInfo,
+      phone,
+      email,
+      address,
+    });
 
-    // Update store di database
-    await db
-      .update(store)
-      .set({
-        name,
-        description,
-        location,
-        manager,
-        contactInfo,
-        phone,
-        email,
-        address,
-        updatedAt: new Date(),
-      })
-      .where(eq(store.id, id));
-
-    sendResponse(res, 200, "store updated successfully");
-    logger.info("store updated successfully");
-  } catch (error) {
+    sendResponse(res, 200, "Store updated successfully");
+  } catch (error: any) {
+    const statusCode = error.message.includes("required")
+      ? 400
+      : error.message.includes("not found")
+      ? 404
+      : error.message.includes("already exists")
+      ? 409
+      : 500;
     logger.error("Error updating store:", error);
-    sendResponse(res, 500, "Internal server error");
+    sendResponse(res, statusCode, error.message);
   }
 };
+
 export const deleteStore = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const { id } = req.body;
-
-    // Validasi input
-    if (!id) {
-      sendResponse(res, 400, "id is required");
-      logger.error("Validation error: id is required");
-      return;
+    const id = parseInt(req.body.id, 10);
+    if (isNaN(id)) {
+      throw new Error("Invalid ID format");
     }
 
-    // Cek apakah store sudah ada
-    const existingstore = await db.select().from(store).where(eq(store.id, id));
-
-    if (existingstore.length === 0) {
-      sendResponse(res, 404, "store not found");
-      logger.error("store not found");
-      return;
-    }
-
-    // Hapus store dari database
-    await db.delete(store).where(eq(store.id, id));
-
-    sendResponse(res, 200, "store deleted successfully");
-    logger.info("store deleted successfully");
-  } catch (error) {
+    await storeService.deleteStore(id);
+    sendResponse(res, 200, "Store deleted successfully");
+  } catch (error: any) {
+    const statusCode = error.message.includes("required")
+      ? 400
+      : error.message.includes("not found")
+      ? 404
+      : 500;
     logger.error("Error deleting store:", error);
-    sendResponse(res, 500, "Internal server error");
+    sendResponse(res, statusCode, error.message);
   }
 };
+
 export const detailStores = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const { id } = req.body;
-    // Validasi input
-    if (!id) {
-      sendResponse(res, 400, "id is required");
-      logger.error("Validation error: id is required");
-      return;
+    const id = parseInt(req.body.id, 10);
+    if (isNaN(id)) {
+      throw new Error("Invalid ID format");
     }
 
-    // Cek apakah store sudah ada
-    const existingstore = await db.select().from(store).where(eq(store.id, id));
-
-    if (existingstore.length === 0) {
-      sendResponse(res, 404, "store not found");
-      logger.error("store not found");
-      return;
-    }
-
-    // Ambil detail store dari database
-    const storeDetail = await db.select().from(store).where(eq(store.id, id));
-
-    sendResponse(res, 200, "store detail retrieved successfully", storeDetail);
-    logger.info("store detail retrieved successfully");
-  } catch (error) {
+    const store = await storeService.getStoreDetail(id);
+    sendResponse(res, 200, "Store detail retrieved successfully", store);
+  } catch (error: any) {
+    const statusCode = error.message.includes("required")
+      ? 400
+      : error.message.includes("not found")
+      ? 404
+      : 500;
     logger.error("Error retrieving store detail:", error);
-    sendResponse(res, 500, "Internal server error");
+    sendResponse(res, statusCode, error.message);
   }
 };
 
@@ -189,40 +146,21 @@ export const listStores = async (
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
     const search = req.query.search as string | undefined;
-    const sortBy = (req.query.sortBy as string) || "createdAt"; // Default sort by createdAt
+    const sortBy = (req.query.sortBy as string) || "createdAt";
     const sortOrder =
-      (req.query.sortOrder as string)?.toLowerCase() === "desc" ? asc : desc; // Default desc
+      (req.query.sortOrder as string)?.toLowerCase() === "asc" ? "asc" : "desc";
 
-    let query = db
-      .select()
-      .from(store)
-      .where(
-        search
-          ? and(ilike(store.name, `%${search}%`), isNull(store.deletedAt))
-          : isNull(store.deletedAt)
-      )
-      .orderBy(
-        sortBy === "name" ? sortOrder(store.name) : sortOrder(store.createdAt)
-      );
-    // Count the total number of records in the database
-    const [total] = await db
-      .select({ count: sql<number>`count(*)` })
-      .from(store)
-      .where(
-        search
-          ? and(ilike(store.name, `%${search}%`), isNull(store.deletedAt))
-          : isNull(store.deletedAt)
-      );
-    // Call the pagination helper function
-    const paginationResult = await pagination(total.count, page, limit);
-    // Apply pagination to the query
-    const data = await query.limit(limit).offset((page - 1) * limit);
-    sendResponse(res, 200, "store list retrieved successfully", {
-      data,
-      pagination: paginationResult,
+    const result = await storeService.listStores({
+      page,
+      limit,
+      search,
+      sortBy,
+      sortOrder,
     });
-  } catch (error) {
+
+    sendResponse(res, 200, "Store list retrieved successfully", result);
+  } catch (error: any) {
     logger.error("Error retrieving store list:", error);
-    sendResponse(res, 500, "Internal server error");
+    sendResponse(res, 500, error.message);
   }
 };
