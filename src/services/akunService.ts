@@ -104,7 +104,7 @@ export class AkunService {
     sortOrder?: "asc" | "desc";
   }) {
     const result = await this.akunRepository.listAkuns(options);
-    const paginationResult = pagination(
+    const paginationResult = await pagination(
       result.total,
       options.page,
       options.limit

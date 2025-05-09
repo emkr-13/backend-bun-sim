@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { createStore,listStores,updateStore,deleteStore,detailStores } from "../controllers/storeController";
-import { store } from "@models/store";
 
 const router = Router();
 // Rute untuk mendapatkan daftar departemen

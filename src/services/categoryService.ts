@@ -66,7 +66,7 @@ export class CategoryService {
     sortOrder?: "asc" | "desc";
   }) {
     const result = await this.categoryRepository.listCategories(options);
-    const paginationResult = pagination(
+    const paginationResult = await pagination(
       result.total,
       options.page,
       options.limit

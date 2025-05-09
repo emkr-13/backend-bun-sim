@@ -2,9 +2,13 @@ import { db } from "../config/db";
 import { categories } from "../models/categories";
 import { eq, sql, ilike, and, isNull, desc, asc } from "drizzle-orm";
 
+
 export interface ICategoryRepository {
   createCategory(data: { name: string; description?: string }): Promise<void>;
-  updateCategory(id: number, data: { name?: string; description?: string }): Promise<void>;
+  updateCategory(
+    id: number,
+    data: { name?: string; description?: string }
+  ): Promise<void>;
   softDeleteCategory(id: number): Promise<void>;
   getCategoryById(id: number): Promise<any>;
   listCategories(options: {
@@ -12,22 +16,25 @@ export interface ICategoryRepository {
     limit: number;
     search?: string;
     sortBy?: string;
-    sortOrder?: 'asc' | 'desc';
+    sortOrder?: "asc" | "desc";
   }): Promise<{ data: any[]; total: number }>;
   categoryExists(name: string): Promise<boolean>;
   categoryExistsById(id: number): Promise<boolean>;
 }
 
 export class CategoryRepository implements ICategoryRepository {
-  async createCategory(data: { name: string; description?: string }): Promise<void> {
+  async createCategory(data: {
+    name: string;
+    description?: string;
+  }): Promise<void> {
     await db.insert(categories).values(data);
   }
 
-  async updateCategory(id: number, data: { name?: string; description?: string }): Promise<void> {
-    await db
-      .update(categories)
-      .set(data)
-      .where(eq(categories.id, id));
+  async updateCategory(
+    id: number,
+    data: { name?: string; description?: string }
+  ): Promise<void> {
+    await db.update(categories).set(data).where(eq(categories.id, id));
   }
 
   async softDeleteCategory(id: number): Promise<void> {
@@ -44,25 +51,32 @@ export class CategoryRepository implements ICategoryRepository {
       .where(eq(categories.id, id));
     return category;
   }
-
   async listCategories(options: {
     page: number;
     limit: number;
     search?: string;
     sortBy?: string;
-    sortOrder?: 'asc' | 'desc';
+    sortOrder?: "asc" | "desc";
   }): Promise<{ data: any[]; total: number }> {
-    const { page, limit, search, sortBy = 'createdAt', sortOrder = 'desc' } = options;
+    const {
+      page,
+      limit,
+      search,
+      sortBy = "createdAt",
+      sortOrder = "desc",
+    } = options;
 
-    const orderBy = sortBy === 'name' 
-      ? sortOrder === 'asc' ? asc(categories.name) : desc(categories.name)
-      : sortOrder === 'asc' ? asc(categories.createdAt) : desc(categories.createdAt);
+    const orderBy =
+      sortBy === "name"
+        ? sortOrder === "asc"
+          ? asc(categories.name)
+          : desc(categories.name)
+        : sortOrder === "asc"
+        ? asc(categories.createdAt)
+        : desc(categories.createdAt);
 
     const whereCondition = search
-      ? and(
-          isNull(categories.deletedAt),
-          ilike(categories.name, `%${search}%`)
-        )
+      ? and(isNull(categories.deletedAt), ilike(categories.name, `%${search}%`))
       : isNull(categories.deletedAt);
 
     const data = await db
@@ -80,7 +94,7 @@ export class CategoryRepository implements ICategoryRepository {
 
     return {
       data,
-      total: total.count
+      total: total.count,
     };
   }
 

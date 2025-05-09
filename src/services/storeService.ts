@@ -97,7 +97,7 @@ export class StoreService {
     sortOrder?: "asc" | "desc";
   }) {
     const result = await this.storeRepository.listStores(options);
-    const paginationResult = pagination(
+    const paginationResult = await pagination(
       result.total,
       options.page,
       options.limit
