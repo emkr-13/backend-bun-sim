@@ -4,6 +4,11 @@ import { eq } from "drizzle-orm";
 
 export interface IUserRepository {
   findUserById(userId: string): Promise<any>;
+  updateRefreshToken(
+    userId: string,
+    refreshToken: string | null,
+    refreshTokenExp: Date | null
+  ): Promise<void>;
   updateUser(userId: string, data: { fullname: string }): Promise<any>;
 }
 
@@ -20,5 +25,18 @@ export class UserRepository implements IUserRepository {
       .where(eq(users.id, userId))
       .returning();
     return updatedUser;
+  }
+  async updateRefreshToken(
+    userId: string,
+    refreshToken: string | null,
+    refreshTokenExp: Date | null
+  ): Promise<void> {
+    await db
+      .update(users)
+      .set({
+        refreshToken,
+        refreshTokenExp,
+      })
+      .where(eq(users.id, userId));
   }
 }

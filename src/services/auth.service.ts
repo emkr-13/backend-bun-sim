@@ -1,4 +1,4 @@
-import { IAuthRepository } from "../repositories/authRepository";
+import { IAuthRepository } from "../repositories/auth.repository";
 import { generateJwtToken, generateRefreshToken } from "../utils/helper";
 import logger from "../utils/logger";
 
@@ -56,12 +56,4 @@ export class AuthService {
     };
   }
 
-  async logout(userId: string) {
-    if (!userId) {
-      throw new Error("Unauthorized");
-    }
-
-    await this.authRepository.updateRefreshToken(userId, null, null);
-    logger.info("Logout successful for user ID:", userId);
-  }
 }

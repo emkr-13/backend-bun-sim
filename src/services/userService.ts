@@ -39,4 +39,12 @@ export class UserService {
 
     return updatedUser;
   }
+    async logout(userId: string) {
+    if (!userId) {
+      throw new Error("Unauthorized");
+    }
+
+    await this.userRepository.updateRefreshToken(userId, null, null);
+    logger.info("Logout successful for user ID:", userId);
+  }
 }

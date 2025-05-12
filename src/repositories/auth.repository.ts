@@ -18,7 +18,6 @@ export class AuthRepository implements IAuthRepository {
     const [user] = await db.select().from(users).where(eq(users.email, email));
     return user;
   }
-
   async updateRefreshToken(
     userId: string,
     refreshToken: string | null,
@@ -32,7 +31,6 @@ export class AuthRepository implements IAuthRepository {
       })
       .where(eq(users.id, userId));
   }
-
   async verifyPassword(
     password: string,
     hashedPassword: string
