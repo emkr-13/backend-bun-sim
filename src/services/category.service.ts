@@ -1,4 +1,4 @@
-import { ICategoryRepository } from "../repositories/categoryRepository";
+import { ICategoryRepository } from "../repositories/category.repository";
 import logger from "../utils/logger";
 import { pagination } from "../utils/helper";
 

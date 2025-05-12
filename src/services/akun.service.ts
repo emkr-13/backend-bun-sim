@@ -1,4 +1,4 @@
-import { IAkunRepository } from "../repositories/akunRepository";
+import { IAkunRepository } from "../repositories/akun.repository";
 import logger from "../utils/logger";
 import { pagination } from "../utils/helper";
 

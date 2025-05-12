@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { sendResponse } from "../utils/responseHelper";
 import logger from "../utils/logger";
-import { UserService } from "../services/userService";
-import { UserRepository } from "../repositories/userRepository";
+import { UserService } from "../services/user.service";
+import { UserRepository } from "../repositories/user.repository";
 
 const userRepository = new UserRepository();
 const userService = new UserService(userRepository);

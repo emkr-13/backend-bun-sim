@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { sendResponse } from "../utils/responseHelper";
 import logger from "../utils/logger";
-import { CategoryService } from "../services/categoryService";
-import { CategoryRepository } from "../repositories/categoryRepository";
+import { CategoryService } from "../services/category.service";
+import { CategoryRepository } from "../repositories/category.repository";
 
 const categoryRepository = new CategoryRepository();
 const categoryService = new CategoryService(categoryRepository);

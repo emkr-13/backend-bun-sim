@@ -1,34 +1,52 @@
 import { Request, Response } from "express";
 import { sendResponse } from "../utils/responseHelper";
 import logger from "../utils/logger";
-import { AkunService } from "../services/akunService";
-import { AkunRepository } from "../repositories/akunRepository";
+import { StoreService } from "../services/store.service";
+import { StoreRepository } from "../repositories/store.repository";
 
-const akunRepository = new AkunRepository();
-const akunService = new AkunService(akunRepository);
+const storeRepository = new StoreRepository();
+const storeService = new StoreService(storeRepository);
 
-export const createAkun = async (
+export const createStore = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const { name, phone, email, address, type } = req.body;
-    await akunService.createAkun({ name, phone, email, address, type });
-    sendResponse(res, 201, "Akun created successfully");
+    const {
+      name,
+      description,
+      location,
+      manager,
+      contactInfo,
+      phone,
+      email,
+      address,
+    } = req.body;
+
+    await storeService.createStore({
+      name,
+      description,
+      location,
+      manager,
+      contactInfo,
+      phone,
+      email,
+      address,
+    });
+
+    sendResponse(res, 201, "Store created successfully");
   } catch (error: any) {
     const statusCode = error.message.includes("required")
       ? 400
       : error.message.includes("already exists")
       ? 409
-      : error.message.includes("Invalid")
-      ? 400
       : 500;
-    logger.error("Error creating akun:", error);
+    logger.error("Error creating store:", error);
     sendResponse(res, statusCode, error.message);
   }
 };
 
-export const updateAkun = async (
+export const updateStore = async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -37,23 +55,44 @@ export const updateAkun = async (
     if (isNaN(id)) {
       throw new Error("Invalid ID format");
     }
-    const { name, phone, email, address, type } = req.body;
-    await akunService.updateAkun(id, { name, phone, email, address, type });
-    sendResponse(res, 200, "Akun updated successfully");
+
+    const {
+      name,
+      description,
+      location,
+      manager,
+      contactInfo,
+      phone,
+      email,
+      address,
+    } = req.body;
+
+    await storeService.updateStore(id, {
+      name,
+      description,
+      location,
+      manager,
+      contactInfo,
+      phone,
+      email,
+      address,
+    });
+
+    sendResponse(res, 200, "Store updated successfully");
   } catch (error: any) {
     const statusCode = error.message.includes("required")
       ? 400
       : error.message.includes("not found")
       ? 404
-      : error.message.includes("Invalid")
-      ? 400
+      : error.message.includes("already exists")
+      ? 409
       : 500;
-    logger.error("Error updating akun:", error);
+    logger.error("Error updating store:", error);
     sendResponse(res, statusCode, error.message);
   }
 };
 
-export const deleteAkun = async (
+export const deleteStore = async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -62,20 +101,21 @@ export const deleteAkun = async (
     if (isNaN(id)) {
       throw new Error("Invalid ID format");
     }
-    await akunService.deleteAkun(id);
-    sendResponse(res, 200, "Akun deleted successfully");
+
+    await storeService.deleteStore(id);
+    sendResponse(res, 200, "Store deleted successfully");
   } catch (error: any) {
     const statusCode = error.message.includes("required")
       ? 400
       : error.message.includes("not found")
       ? 404
       : 500;
-    logger.error("Error deleting akun:", error);
+    logger.error("Error deleting store:", error);
     sendResponse(res, statusCode, error.message);
   }
 };
 
-export const detailAkun = async (
+export const detailStores = async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -84,41 +124,43 @@ export const detailAkun = async (
     if (isNaN(id)) {
       throw new Error("Invalid ID format");
     }
-    const akun = await akunService.getAkunDetail(id);
-    sendResponse(res, 200, "Akun found", akun);
+
+    const store = await storeService.getStoreDetail(id);
+    sendResponse(res, 200, "Store detail retrieved successfully", store);
   } catch (error: any) {
     const statusCode = error.message.includes("required")
       ? 400
       : error.message.includes("not found")
       ? 404
       : 500;
-    logger.error("Error getting akun detail:", error);
+    logger.error("Error retrieving store detail:", error);
     sendResponse(res, statusCode, error.message);
   }
 };
 
-export const listAkuns = async (req: Request, res: Response): Promise<void> => {
+export const listStores = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
     const search = req.query.search as string | undefined;
-    const type = req.query.type as "customer" | "supplier" | undefined;
     const sortBy = (req.query.sortBy as string) || "createdAt";
     const sortOrder =
       (req.query.sortOrder as string)?.toLowerCase() === "asc" ? "asc" : "desc";
 
-    const result = await akunService.listAkuns({
+    const result = await storeService.listStores({
       page,
       limit,
       search,
-      type,
       sortBy,
       sortOrder,
     });
 
-    sendResponse(res, 200, "Akuns retrieved successfully", result);
+    sendResponse(res, 200, "Store list retrieved successfully", result);
   } catch (error: any) {
-    logger.error("Error retrieving akuns:", error);
+    logger.error("Error retrieving store list:", error);
     sendResponse(res, 500, error.message);
   }
 };

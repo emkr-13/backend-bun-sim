@@ -1,4 +1,4 @@
-import { IStoreRepository } from "../repositories/storeRepository";
+import { IStoreRepository } from "../repositories/store.repository";
 import logger from "../utils/logger";
 import { pagination } from "../utils/helper";
 

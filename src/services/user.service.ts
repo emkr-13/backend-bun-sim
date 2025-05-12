@@ -1,4 +1,4 @@
-import { IUserRepository } from "../repositories/userRepository";
+import { IUserRepository } from "../repositories/user.repository";
 import logger from "../utils/logger";
 
 export class UserService {

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { listAkuns ,createAkun,deleteAkun,detailAkun,updateAkun} from "../controllers/akunController";
+import { listAkuns ,createAkun,deleteAkun,detailAkun,updateAkun} from "../controllers/akun.controller";
 
 const router = Router();
 

@@ -5,7 +5,7 @@ import {
   updateCategory,
   deleteCategory,
   detailCategory,
-} from "../controllers/categoriesController";
+} from "../controllers/categories.controller";
 
 const router = Router();
 
