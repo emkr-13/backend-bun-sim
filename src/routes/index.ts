@@ -4,6 +4,7 @@ import userRoutes from "./user";
 import categoriesRoutes from "./categories";
 import storeRoutes from "./store";
 import akunRoutes from "./akun";
+import productsRoutes from "./products";
 import { authenticate } from "../middleware/authMiddleware";
 
 const router = Router();
@@ -17,6 +18,7 @@ protectedRouter.use("/user", userRoutes);
 protectedRouter.use("/categories", categoriesRoutes);
 protectedRouter.use("/store", storeRoutes);
 protectedRouter.use("/akun", akunRoutes);
+protectedRouter.use("/products", productsRoutes);
 
 // Apply authentication middleware to all protected routes
 router.use(authenticate, protectedRouter);
