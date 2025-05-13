@@ -39,27 +39,21 @@ JWT_SECRET=your_jwt_secret_key
 bun install
 ```
 
-## Database Setup
+## Setup the Application
 
-1. Create database:
-
-```bash
-createdb database_name
-```
-
-2. Generate migration files:
+1. Generate migration files:
 
 ```bash
 bun run drizzle-kit generate
 ```
 
-3. Apply migrations:
+2. Apply migrations:
 
 ```bash
 bun run drizzle-kit push
 ```
 
-4. (Optional) Run seeders:
+3. (Optional) Run seeders:
 
 ```bash
 bun run src/seeders/userSeeder.ts
