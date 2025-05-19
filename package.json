@@ -21,7 +21,11 @@
   },
   "dependencies": {
     "@faker-js/faker": "^9.7.0",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
     "bcryptjs": "^3.0.2",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "drizzle-kit": "^0.31.0",
@@ -33,6 +37,8 @@
     "pino-multi-stream": "^6.0.0",
     "pino-pretty": "^13.0.0",
     "postgres": "^3.4.5",
-    "rotating-file-stream": "^3.2.6"
+    "rotating-file-stream": "^3.2.6",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   }
 }
