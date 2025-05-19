@@ -56,4 +56,86 @@ export class AuthService {
     };
   }
 
+  async register(email: string, password: string, fullname: string) {
+    // Validate input
+    if (!email || !password || !fullname) {
+      throw new Error("email, password and fullname are required");
+    }
+
+    // Check if user already exists
+    const existingUser = await this.authRepository.findUserByEmail(email);
+    if (existingUser) {
+      throw new Error("User with this email already exists");
+    }
+
+    // Create user
+    const user = await this.authRepository.createUser({
+      email,
+      password,
+      fullname,
+    });
+
+    logger.info("User registered successfully: ", email);
+
+    return user;
+  }
+
+  async refreshToken(refreshToken: string) {
+    // Validate input
+    if (!refreshToken) {
+      throw new Error("Refresh token is required");
+    }
+
+    // Verify refresh token
+    const user = await this.authRepository.findUserByRefreshToken(refreshToken);
+    if (!user) {
+      throw new Error("Invalid refresh token");
+    }
+
+    // Check if refresh token is expired
+    if (user.refreshTokenExp && new Date(user.refreshTokenExp) < new Date()) {
+      throw new Error("Refresh token expired");
+    }
+
+    // Generate new tokens
+    const jwtResponse = await generateJwtToken({ id: user.id });
+    const authToken = jwtResponse.token ?? "";
+
+    const refreshTokenResponse = await generateRefreshToken({ id: user.id });
+    const newRefreshToken = refreshTokenResponse.token ?? "";
+
+    if (!newRefreshToken) {
+      throw new Error("Refresh token generation failed");
+    }
+
+    // Update refresh token in database
+    const refreshTokenExp = new Date(
+      Date.now() + parseInt(process.env.REFRESH_TOKEN_EXP!) * 1000
+    );
+
+    await this.authRepository.updateRefreshToken(
+      user.id,
+      newRefreshToken,
+      refreshTokenExp
+    );
+
+    logger.info("Token refreshed successfully for user ID: ", user.id);
+
+    return {
+      token: authToken,
+      refreshToken: newRefreshToken,
+    };
+  }
+
+  async logout(userId: string) {
+    // Validate input
+    if (!userId) {
+      throw new Error("User ID is required");
+    }
+
+    // Clear refresh token
+    await this.authRepository.updateRefreshToken(userId, null, null);
+
+    logger.info("Logout successful for user ID: ", userId);
+  }
 }

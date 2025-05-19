@@ -1,12 +1,51 @@
 import { Router } from "express";
-import { editUser, getProfile, logout } from "../controllers/user.controller";
+import {
+  getUserProfile,
+  updateUserProfile,
+  changePassword,
+} from "../controllers/user.controller";
+import { validateDto } from "../middleware/validationMiddleware";
+import { ChangePasswordDto, UpdateUserDto } from "../dtos/user.dto";
 
+/**
+ * @swagger
+ * tags:
+ *   name: User
+ *   description: User management endpoints
+ */
 const router = Router();
 
-// Rute untuk mendapatkan profil user
-router.get("/detail", getProfile);
-router.post("/logout", logout);
-// Rute untuk mengedit user
-router.post("/edit", editUser);
+/**
+ * @swagger
+ * /api/user/profile:
+ *   get:
+ *     summary: Get user profile
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ */
+router.get("/profile", getUserProfile);
+
+/**
+ * @swagger
+ * /api/user/update:
+ *   put:
+ *     summary: Update user profile
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ */
+router.put("/update", validateDto(UpdateUserDto), updateUserProfile);
+
+/**
+ * @swagger
+ * /api/user/change-password:
+ *   post:
+ *     summary: Change user password
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ */
+router.post("/change-password", validateDto(ChangePasswordDto), changePassword);
 
 export default router;

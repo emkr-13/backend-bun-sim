@@ -3,13 +3,54 @@ import { sendResponse } from "../utils/responseHelper";
 import logger from "../utils/logger";
 import { AuthService } from "../services/auth.service";
 import { AuthRepository } from "../repositories/auth.repository";
+import { LoginDto, RefreshTokenDto, RegisterDto } from "../dtos/auth.dto";
 
 const authRepository = new AuthRepository();
 const authService = new AuthService(authRepository);
 
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Login to the system
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/LoginDto'
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     accessToken:
+ *                       type: string
+ *                     refreshToken:
+ *                       type: string
+ *                     user:
+ *                       type: object
+ *       400:
+ *         description: Missing required fields
+ *       401:
+ *         description: Invalid credentials
+ *       500:
+ *         description: Server error
+ */
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.body as LoginDto;
     const result = await authService.login(email, password);
     sendResponse(res, 200, "Login successful", result);
   } catch (error: any) {
@@ -20,5 +61,112 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       ? 400
       : 500;
     sendResponse(res, statusCode, error.message);
+  }
+};
+
+/**
+ * @swagger
+ * /api/auth/register:
+ *   post:
+ *     summary: Register a new user
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/RegisterDto'
+ *     responses:
+ *       201:
+ *         description: User registered successfully
+ *       400:
+ *         description: Missing required fields or validation error
+ *       409:
+ *         description: Email already exists
+ *       500:
+ *         description: Server error
+ */
+export const register = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email, password, fullname } = req.body as RegisterDto;
+    await authService.register(email, password, fullname);
+    sendResponse(res, 201, "User registered successfully");
+  } catch (error: any) {
+    logger.error("Error during registration:", error);
+    const statusCode = error.message.includes("already exists")
+      ? 409
+      : error.message.includes("required")
+      ? 400
+      : 500;
+    sendResponse(res, statusCode, error.message);
+  }
+};
+
+/**
+ * @swagger
+ * /api/auth/refresh-token:
+ *   post:
+ *     summary: Refresh access token
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/RefreshTokenDto'
+ *     responses:
+ *       200:
+ *         description: Token refreshed successfully
+ *       400:
+ *         description: Invalid refresh token
+ *       401:
+ *         description: Refresh token expired
+ *       500:
+ *         description: Server error
+ */
+export const refreshToken = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { refreshToken: token } = req.body as RefreshTokenDto;
+    const result = await authService.refreshToken(token);
+    sendResponse(res, 200, "Token refreshed successfully", result);
+  } catch (error: any) {
+    logger.error("Error refreshing token:", error);
+    const statusCode =
+      error.message.includes("expired") || error.message.includes("invalid")
+        ? 401
+        : 500;
+    sendResponse(res, statusCode, error.message);
+  }
+};
+
+/**
+ * @swagger
+ * /api/auth/logout:
+ *   post:
+ *     summary: Logout user
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Logged out successfully
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ */
+export const logout = async (req: Request, res: Response): Promise<void> => {
+  try {
+    // TypeScript doesn't recognize req.user because it's added by middleware
+    // Use type assertion to access it
+    const userId = (req as any).user?.id;
+    await authService.logout(userId);
+    sendResponse(res, 200, "Logged out successfully");
+  } catch (error: any) {
+    logger.error("Error during logout:", error);
+    sendResponse(res, 500, error.message);
   }
 };
