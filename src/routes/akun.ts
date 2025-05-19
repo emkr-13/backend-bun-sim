@@ -13,7 +13,6 @@ import {
   DeleteAkunDto,
   AkunDetailDto,
 } from "../dtos/akun.dto";
-import { authenticate } from "../middleware/authMiddleware";
 
 /**
  * @swagger
@@ -32,7 +31,7 @@ const router = Router();
  *     security:
  *       - bearerAuth: []
  */
-router.get("/all", authenticate, listAkuns);
+router.get("/all", listAkuns);
 
 /**
  * @swagger
@@ -43,7 +42,7 @@ router.get("/all", authenticate, listAkuns);
  *     security:
  *       - bearerAuth: []
  */
-router.post("/create", authenticate, validateDto(CreateAkunDto), createAkun);
+router.post("/create", validateDto(CreateAkunDto), createAkun);
 
 /**
  * @swagger
@@ -54,7 +53,7 @@ router.post("/create", authenticate, validateDto(CreateAkunDto), createAkun);
  *     security:
  *       - bearerAuth: []
  */
-router.post("/update", authenticate, validateDto(UpdateAkunDto), updateAkun);
+router.post("/update", validateDto(UpdateAkunDto), updateAkun);
 
 /**
  * @swagger
@@ -65,7 +64,7 @@ router.post("/update", authenticate, validateDto(UpdateAkunDto), updateAkun);
  *     security:
  *       - bearerAuth: []
  */
-router.post("/delete", authenticate, validateDto(DeleteAkunDto), deleteAkun);
+router.post("/delete", validateDto(DeleteAkunDto), deleteAkun);
 
 /**
  * @swagger
@@ -76,6 +75,6 @@ router.post("/delete", authenticate, validateDto(DeleteAkunDto), deleteAkun);
  *     security:
  *       - bearerAuth: []
  */
-router.post("/detail", authenticate, validateDto(AkunDetailDto), detailAkun);
+router.post("/detail", validateDto(AkunDetailDto), detailAkun);
 
 export default router;

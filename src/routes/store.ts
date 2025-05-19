@@ -13,7 +13,6 @@ import {
   StoreDetailDto,
   UpdateStoreDto,
 } from "../dtos/store.dto";
-import { authenticate } from "../middleware/authMiddleware";
 
 /**
  * @swagger
@@ -32,7 +31,7 @@ const router = Router();
  *     security:
  *       - bearerAuth: []
  */
-router.get("/all", authenticate, listStores);
+router.get("/all", listStores);
 
 /**
  * @swagger
@@ -43,7 +42,7 @@ router.get("/all", authenticate, listStores);
  *     security:
  *       - bearerAuth: []
  */
-router.post("/create", authenticate, validateDto(CreateStoreDto), createStore);
+router.post("/create",  validateDto(CreateStoreDto), createStore);
 
 /**
  * @swagger
@@ -54,7 +53,7 @@ router.post("/create", authenticate, validateDto(CreateStoreDto), createStore);
  *     security:
  *       - bearerAuth: []
  */
-router.post("/update", authenticate, validateDto(UpdateStoreDto), updateStore);
+router.post("/update",  validateDto(UpdateStoreDto), updateStore);
 
 /**
  * @swagger
@@ -65,7 +64,7 @@ router.post("/update", authenticate, validateDto(UpdateStoreDto), updateStore);
  *     security:
  *       - bearerAuth: []
  */
-router.post("/delete", authenticate, validateDto(DeleteStoreDto), deleteStore);
+router.post("/delete", validateDto(DeleteStoreDto), deleteStore);
 
 /**
  * @swagger
@@ -76,6 +75,6 @@ router.post("/delete", authenticate, validateDto(DeleteStoreDto), deleteStore);
  *     security:
  *       - bearerAuth: []
  */
-router.post("/detail", authenticate, validateDto(StoreDetailDto), detailStores);
+router.post("/detail",  validateDto(StoreDetailDto), detailStores);
 
 export default router;

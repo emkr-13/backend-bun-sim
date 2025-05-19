@@ -13,7 +13,6 @@ import {
   DeleteCategoryDto,
   UpdateCategoryDto,
 } from "../dtos/category.dto";
-import { authenticate } from "../middleware/authMiddleware";
 
 /**
  * @swagger
@@ -32,7 +31,7 @@ const router = Router();
  *     security:
  *       - bearerAuth: []
  */
-router.get("/all", authenticate, listCategories);
+router.get("/all", listCategories);
 
 /**
  * @swagger
@@ -45,7 +44,6 @@ router.get("/all", authenticate, listCategories);
  */
 router.post(
   "/create",
-  authenticate,
   validateDto(CreateCategoryDto),
   createCategory
 );
@@ -61,7 +59,7 @@ router.post(
  */
 router.post(
   "/update",
-  authenticate,
+
   validateDto(UpdateCategoryDto),
   updateCategory
 );
@@ -77,7 +75,6 @@ router.post(
  */
 router.post(
   "/delete",
-  authenticate,
   validateDto(DeleteCategoryDto),
   deleteCategory
 );
@@ -93,7 +90,6 @@ router.post(
  */
 router.post(
   "/detail",
-  authenticate,
   validateDto(CategoryDetailDto),
   detailCategory
 );
