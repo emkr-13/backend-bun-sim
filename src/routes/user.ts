@@ -35,7 +35,7 @@ router.get("/profile", getUserProfile);
  *     security:
  *       - bearerAuth: []
  */
-router.put("/update", validateDto(UpdateUserDto), updateUserProfile);
+router.post("/update", validateDto(UpdateUserDto), updateUserProfile);
 
 /**
  * @swagger
