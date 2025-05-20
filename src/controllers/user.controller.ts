@@ -55,7 +55,7 @@ export const getUserProfile = async (
 /**
  * @swagger
  * /api/user/update:
- *   put:
+ *   post:
  *     summary: Update user profile
  *     tags: [User]
  *     security:
@@ -109,56 +109,3 @@ export const updateUserProfile = async (
   }
 };
 
-/**
- * @swagger
- * /api/user/change-password:
- *   post:
- *     summary: Change user password
- *     tags: [User]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/ChangePasswordDto'
- *     responses:
- *       200:
- *         description: Password changed successfully
- *       400:
- *         description: Invalid input data or incorrect current password
- *       401:
- *         description: Unauthorized
- *       404:
- *         description: User not found
- *       500:
- *         description: Server error
- */
-export const changePassword = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  try {
-    // Note: This is a placeholder. You'll need to implement the changePassword method in your UserService
-    const userId = (req as any).user?.id;
-    const { currentPassword, newPassword } = req.body as ChangePasswordDto;
-
-    // This is a placeholder. Implement the actual service method
-    // await userService.changePassword(userId, currentPassword, newPassword);
-
-    // For now, we'll just log the action
-    logger.info(`Password change requested for user ${userId}`);
-    sendResponse(res, 200, "Password changed successfully");
-  } catch (error: any) {
-    logger.error("Error changing password:", error);
-    const statusCode = error.message.includes("not found")
-      ? 404
-      : error.message.includes("incorrect")
-      ? 400
-      : error.message.includes("required")
-      ? 400
-      : 500;
-    sendResponse(res, statusCode, error.message);
-  }
-};
