@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { sendResponse } from "../utils/responseHelper";
-import logger from "../utils/logger";
+import logger, { logApiError } from "../utils/logger";
 import { ProductService } from "../services/product.service";
 import { ProductRepository } from "../repositories/product.repository";
 import {
@@ -64,7 +64,7 @@ export const createProduct = async (
       : error.message.includes("already exists")
       ? 409
       : 500;
-    logger.error("Error creating product:", error);
+    logApiError(statusCode, error.message, `${req.baseUrl}${req.path}`, error);
     sendResponse(res, statusCode, error.message);
   }
 };
@@ -119,7 +119,7 @@ export const updateProduct = async (
       : error.message.includes("already exists")
       ? 409
       : 500;
-    logger.error("Error updating product:", error);
+    logApiError(statusCode, error.message, `${req.baseUrl}${req.path}`, error);
     sendResponse(res, statusCode, error.message);
   }
 };
@@ -162,7 +162,7 @@ export const deleteProduct = async (
       : error.message.includes("not found")
       ? 404
       : 500;
-    logger.error("Error deleting product:", error);
+    logApiError(statusCode, error.message, `${req.baseUrl}${req.path}`, error);
     sendResponse(res, statusCode, error.message);
   }
 };
@@ -205,7 +205,7 @@ export const getProductDetail = async (
       : error.message.includes("not found")
       ? 404
       : 500;
-    logger.error("Error getting product detail:", error);
+    logApiError(statusCode, error.message, `${req.baseUrl}${req.path}`, error);
     sendResponse(res, statusCode, error.message);
   }
 };
@@ -286,7 +286,7 @@ export const listProducts = async (
 
     sendResponse(res, 200, "Products retrieved successfully", result);
   } catch (error: any) {
-    logger.error("Error listing products:", error);
+    logApiError(500, error.message, `${req.baseUrl}${req.path}`, error);
     sendResponse(res, 500, error.message);
   }
 };

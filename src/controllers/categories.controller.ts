@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { sendResponse } from "../utils/responseHelper";
-import logger from "../utils/logger";
+import logger, { logApiError } from "../utils/logger";
 import { CategoryService } from "../services/category.service";
 import { CategoryRepository } from "../repositories/category.repository";
 import {
@@ -51,7 +51,7 @@ export const createCategory = async (
       : error.message.includes("already exists")
       ? 409
       : 500;
-    logger.error("Error creating category:", error);
+    logApiError(statusCode, error.message, `${req.baseUrl}${req.path}`, error);
     sendResponse(res, statusCode, error.message);
   }
 };
@@ -94,7 +94,7 @@ export const updateCategory = async (
       : error.message.includes("not found")
       ? 404
       : 500;
-    logger.error("Error updating category:", error);
+    logApiError(statusCode, error.message, `${req.baseUrl}${req.path}`, error);
     sendResponse(res, statusCode, error.message);
   }
 };
@@ -137,7 +137,7 @@ export const deleteCategory = async (
       : error.message.includes("not found")
       ? 404
       : 500;
-    logger.error("Error deleting category:", error);
+    logApiError(statusCode, error.message, `${req.baseUrl}${req.path}`, error);
     sendResponse(res, statusCode, error.message);
   }
 };
@@ -191,7 +191,7 @@ export const detailCategory = async (
       : error.message.includes("not found")
       ? 404
       : 500;
-    logger.error("Error retrieving category details:", error);
+    logApiError(statusCode, error.message, `${req.baseUrl}${req.path}`, error);
     sendResponse(res, statusCode, error.message);
   }
 };
@@ -281,7 +281,7 @@ export const listCategories = async (
 
     sendResponse(res, 200, "Categories retrieved successfully", result);
   } catch (error: any) {
-    logger.error("Error retrieving categories:", error);
+    logApiError(500, error.message, `${req.baseUrl}${req.path}`, error);
     sendResponse(res, 500, error.message);
   }
 };

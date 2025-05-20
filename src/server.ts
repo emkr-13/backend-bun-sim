@@ -4,6 +4,7 @@ import cors from "cors";
 import logger from "./utils/logger"; // Import logger
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./config/swagger";
+import { requestLogger, errorLogger } from "./middleware/loggerMiddleware";
 
 const app = express();
 const PORT = process.env.APP_PORT || 3000;
@@ -11,11 +12,17 @@ const PORT = process.env.APP_PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
+// Apply request logger middleware
+app.use(requestLogger);
+
 // Swagger documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // API routes
 app.use("/api", routes);
+
+// Error logger middleware
+app.use(errorLogger);
 
 // Start the server
 app.listen(PORT, () => {

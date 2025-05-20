@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { sendResponse } from "../utils/responseHelper";
-import logger from "../utils/logger";
+import logger, { logApiError } from "../utils/logger";
 import { StoreService } from "../services/store.service";
 import { StoreRepository } from "../repositories/store.repository";
 import {
@@ -71,7 +71,7 @@ export const createStore = async (
       : error.message.includes("already exists")
       ? 409
       : 500;
-    logger.error("Error creating store:", error);
+    logApiError(statusCode, error.message, `${req.baseUrl}${req.path}`, error);
     sendResponse(res, statusCode, error.message);
   }
 };
@@ -140,7 +140,7 @@ export const updateStore = async (
         : error.message.includes("already exists")
         ? 409
         : 500;
-    logger.error("Error updating store:", error);
+    logApiError(statusCode, error.message, `${req.baseUrl}${req.path}`, error);
     sendResponse(res, statusCode, error.message);
   }
 };
@@ -184,7 +184,7 @@ export const deleteStore = async (
         : error.message.includes("not found")
         ? 404
         : 500;
-    logger.error("Error deleting store:", error);
+    logApiError(statusCode, error.message, `${req.baseUrl}${req.path}`, error);
     sendResponse(res, statusCode, error.message);
   }
 };
@@ -239,7 +239,7 @@ export const detailStores = async (
         : error.message.includes("not found")
         ? 404
         : 500;
-    logger.error("Error retrieving store detail:", error);
+    logApiError(statusCode, error.message, `${req.baseUrl}${req.path}`, error);
     sendResponse(res, statusCode, error.message);
   }
 };
@@ -329,7 +329,7 @@ export const listStores = async (
 
     sendResponse(res, 200, "Store list retrieved successfully", result);
   } catch (error: any) {
-    logger.error("Error retrieving store list:", error);
+    logApiError(500, error.message, `${req.baseUrl}${req.path}`, error);
     sendResponse(res, 500, error.message);
   }
 };

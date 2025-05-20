@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { sendResponse } from "../utils/responseHelper";
-import logger from "../utils/logger";
+import logger, { logApiError } from "../utils/logger";
 import { AkunService } from "../services/akun.service";
 import { AkunRepository } from "../repositories/akun.repository";
 import { plainToInstance } from "class-transformer";
@@ -54,7 +54,7 @@ export const createAkun = async (
       : error.message.includes("Invalid")
       ? 400
       : 500;
-    logger.error("Error creating akun:", error);
+    logApiError(statusCode, error.message, `${req.baseUrl}${req.path}`, error);
     sendResponse(res, statusCode, error.message);
   }
 };
@@ -100,7 +100,7 @@ export const updateAkun = async (
       : error.message.includes("Invalid")
       ? 400
       : 500;
-    logger.error("Error updating akun:", error);
+    logApiError(statusCode, error.message, `${req.baseUrl}${req.path}`, error);
     sendResponse(res, statusCode, error.message);
   }
 };
@@ -143,7 +143,7 @@ export const deleteAkun = async (
       : error.message.includes("not found")
       ? 404
       : 500;
-    logger.error("Error deleting akun:", error);
+    logApiError(statusCode, error.message, `${req.baseUrl}${req.path}`, error);
     sendResponse(res, statusCode, error.message);
   }
 };
@@ -190,7 +190,7 @@ export const detailAkun = async (
       : error.message.includes("not found")
       ? 404
       : 500;
-    logger.error("Error getting akun detail:", error);
+    logApiError(statusCode, error.message, `${req.baseUrl}${req.path}`, error);
     sendResponse(res, statusCode, error.message);
   }
 };
@@ -287,7 +287,7 @@ export const listAkuns = async (req: Request, res: Response): Promise<void> => {
 
     sendResponse(res, 200, "Akuns retrieved successfully", result);
   } catch (error: any) {
-    logger.error("Error retrieving akuns:", error);
+    logApiError(500, error.message, `${req.baseUrl}${req.path}`, error);
     sendResponse(res, 500, error.message);
   }
 };
