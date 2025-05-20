@@ -49,7 +49,7 @@ export const createProduct = async (
     await productService.createProduct({
       name,
       description,
-      categoryId: parseInt(categoryId, 10), // Convert UUID to number if needed
+      categoryId,
       // Add any other required fields with default values if needed
       sku: `SKU-${Date.now()}`,
       stock: 0,
@@ -101,10 +101,10 @@ export const updateProduct = async (
     const { id, name, description, categoryId, price } =
       req.body as UpdateProductDto;
 
-    await productService.updateProduct(parseInt(id, 10), {
+    await productService.updateProduct(id, {
       name,
       description,
-      categoryId: categoryId ? parseInt(categoryId, 10) : undefined,
+      categoryId,
       price_sell: price ? price.toString() : undefined,
       price_cost: price ? (price * 0.7).toString() : undefined,
       // Add other fields as needed
@@ -154,7 +154,7 @@ export const deleteProduct = async (
 ): Promise<void> => {
   try {
     const { id } = req.body as DeleteProductDto;
-    await productService.deleteProduct(parseInt(id, 10));
+    await productService.deleteProduct(id);
     sendResponse(res, 200, "Product deleted successfully");
   } catch (error: any) {
     const statusCode = error.message.includes("required")
@@ -197,7 +197,7 @@ export const getProductDetail = async (
 ): Promise<void> => {
   try {
     const { id } = req.body as ProductDetailDto;
-    const product = await productService.getProductDetail(parseInt(id, 10));
+    const product = await productService.getProductDetail(id);
     sendResponse(res, 200, "Product details retrieved successfully", product);
   } catch (error: any) {
     const statusCode = error.message.includes("required")
@@ -239,8 +239,7 @@ export const getProductDetail = async (
  *       - in: query
  *         name: categoryId
  *         schema:
- *           type: string
- *           format: uuid
+ *           type: integer
  *         description: Filter by category ID
  *       - in: query
  *         name: sortBy
@@ -270,7 +269,7 @@ export const listProducts = async (
     const limit = parseInt(req.query.limit as string) || 10;
     const search = req.query.search as string | undefined;
     const categoryId = req.query.categoryId
-      ? parseInt(req.query.categoryId as string, 10)
+      ? parseInt(req.query.categoryId as string)
       : undefined;
     const sortBy = (req.query.sortBy as string) || "createdAt";
     const sortOrder =

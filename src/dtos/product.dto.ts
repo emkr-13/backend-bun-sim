@@ -4,7 +4,6 @@ import {
   IsOptional,
   IsNotEmpty,
   Min,
-  IsUUID,
 } from "class-validator";
 
 /**
@@ -28,8 +27,7 @@ import {
  *           type: number
  *           description: The product price
  *         categoryId:
- *           type: string
- *           format: uuid
+ *           type: integer
  *           description: The category ID
  */
 export class CreateProductDto {
@@ -47,8 +45,9 @@ export class CreateProductDto {
   price!: number;
 
   @IsNotEmpty()
-  @IsUUID()
-  categoryId!: string;
+  @IsNumber()
+  @Min(1)
+  categoryId!: number;
 }
 
 /**
@@ -61,8 +60,7 @@ export class CreateProductDto {
  *         - id
  *       properties:
  *         id:
- *           type: string
- *           format: uuid
+ *           type: integer
  *           description: The product ID
  *         name:
  *           type: string
@@ -74,14 +72,14 @@ export class CreateProductDto {
  *           type: number
  *           description: The product price
  *         categoryId:
- *           type: string
- *           format: uuid
+ *           type: integer
  *           description: The category ID
  */
 export class UpdateProductDto {
   @IsNotEmpty()
-  @IsUUID()
-  id!: string;
+  @IsNumber()
+  @Min(1)
+  id!: number;
 
   @IsOptional()
   @IsString()
@@ -97,8 +95,9 @@ export class UpdateProductDto {
   price?: number;
 
   @IsOptional()
-  @IsUUID()
-  categoryId?: string;
+  @IsNumber()
+  @Min(1)
+  categoryId?: number;
 }
 
 /**
@@ -111,14 +110,16 @@ export class UpdateProductDto {
  *         - id
  *       properties:
  *         id:
- *           type: string
- *           format: uuid
+ *           type: integer
  *           description: The product ID
+ *       example:
+ *         id: 1
  */
 export class DeleteProductDto {
   @IsNotEmpty()
-  @IsUUID()
-  id!: string;
+  @IsNumber()
+  @Min(1)
+  id!: number;
 }
 
 /**
@@ -131,12 +132,14 @@ export class DeleteProductDto {
  *         - id
  *       properties:
  *         id:
- *           type: string
- *           format: uuid
+ *           type: integer
  *           description: The product ID
+ *       example:
+ *         id: 1
  */
 export class ProductDetailDto {
   @IsNotEmpty()
-  @IsUUID()
-  id!: string;
+  @IsNumber()
+  @Min(1)
+  id!: number;
 }
