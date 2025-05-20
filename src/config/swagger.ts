@@ -15,6 +15,7 @@ const options: swaggerJsdoc.Options = {
         description: "Development server",
       },
     ],
+    schemes: ["http", "https"],
     components: {
       securitySchemes: {
         bearerAuth: {

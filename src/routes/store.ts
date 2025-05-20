@@ -30,6 +30,11 @@ const router = Router();
  *     tags: [Stores]
  *     security:
  *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of stores retrieved successfully
+ *       500:
+ *         description: Server error
  */
 router.get("/all", listStores);
 
@@ -41,8 +46,21 @@ router.get("/all", listStores);
  *     tags: [Stores]
  *     security:
  *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CreateStoreDto'
+ *     responses:
+ *       201:
+ *         description: Store created successfully
+ *       400:
+ *         description: Invalid input data
+ *       500:
+ *         description: Server error
  */
-router.post("/create",  validateDto(CreateStoreDto), createStore);
+router.post("/create", validateDto(CreateStoreDto), createStore);
 
 /**
  * @swagger
@@ -52,8 +70,23 @@ router.post("/create",  validateDto(CreateStoreDto), createStore);
  *     tags: [Stores]
  *     security:
  *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdateStoreDto'
+ *     responses:
+ *       200:
+ *         description: Store updated successfully
+ *       400:
+ *         description: Invalid input data
+ *       404:
+ *         description: Store not found
+ *       500:
+ *         description: Server error
  */
-router.post("/update",  validateDto(UpdateStoreDto), updateStore);
+router.post("/update", validateDto(UpdateStoreDto), updateStore);
 
 /**
  * @swagger
@@ -63,6 +96,21 @@ router.post("/update",  validateDto(UpdateStoreDto), updateStore);
  *     tags: [Stores]
  *     security:
  *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/DeleteStoreDto'
+ *     responses:
+ *       200:
+ *         description: Store deleted successfully
+ *       400:
+ *         description: Invalid input data
+ *       404:
+ *         description: Store not found
+ *       500:
+ *         description: Server error
  */
 router.post("/delete", validateDto(DeleteStoreDto), deleteStore);
 
@@ -74,7 +122,22 @@ router.post("/delete", validateDto(DeleteStoreDto), deleteStore);
  *     tags: [Stores]
  *     security:
  *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/StoreDetailDto'
+ *     responses:
+ *       200:
+ *         description: Store details retrieved successfully
+ *       400:
+ *         description: Invalid input data
+ *       404:
+ *         description: Store not found
+ *       500:
+ *         description: Server error
  */
-router.post("/detail",  validateDto(StoreDetailDto), detailStores);
+router.post("/detail", validateDto(StoreDetailDto), detailStores);
 
 export default router;

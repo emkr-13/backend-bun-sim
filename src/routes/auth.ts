@@ -23,6 +23,19 @@ const router = Router();
  *   post:
  *     summary: Login to the system
  *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/LoginDto'
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *       400:
+ *         description: Invalid credentials
+ *       500:
+ *         description: Server error
  */
 router.post("/login", validateDto(LoginDto), login);
 
@@ -32,6 +45,21 @@ router.post("/login", validateDto(LoginDto), login);
  *   post:
  *     summary: Register a new user
  *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/RegisterDto'
+ *     responses:
+ *       201:
+ *         description: User registered successfully
+ *       400:
+ *         description: Invalid input data
+ *       409:
+ *         description: User already exists
+ *       500:
+ *         description: Server error
  */
 router.post("/register", validateDto(RegisterDto), register);
 
@@ -41,6 +69,21 @@ router.post("/register", validateDto(RegisterDto), register);
  *   post:
  *     summary: Refresh access token
  *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/RefreshTokenDto'
+ *     responses:
+ *       200:
+ *         description: Token refreshed successfully
+ *       400:
+ *         description: Invalid refresh token
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
  */
 router.post("/refresh-token", validateDto(RefreshTokenDto), refreshToken);
 
@@ -52,6 +95,13 @@ router.post("/refresh-token", validateDto(RefreshTokenDto), refreshToken);
  *     tags: [Authentication]
  *     security:
  *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Logout successful
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
  */
 router.post("/logout", authenticate, logout);
 

@@ -20,6 +20,8 @@ const akunService = new AkunService(akunRepository);
  *   post:
  *     summary: Create a new account
  *     tags: [Akun]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -63,6 +65,8 @@ export const createAkun = async (
  *   post:
  *     summary: Update an existing account
  *     tags: [Akun]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -107,6 +111,8 @@ export const updateAkun = async (
  *   post:
  *     summary: Delete an account
  *     tags: [Akun]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -148,6 +154,8 @@ export const deleteAkun = async (
  *   post:
  *     summary: Get account details
  *     tags: [Akun]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -193,6 +201,8 @@ export const detailAkun = async (
  *   get:
  *     summary: Get list of accounts
  *     tags: [Akun]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: query
  *         name: page
