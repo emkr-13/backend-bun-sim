@@ -9,6 +9,7 @@ A robust backend system built with modern technologies for managing inventory be
 - **Database**: PostgreSQL
 - **ORM**: Drizzle ORM
 - **Authentication**: JWT
+- **Dokumentasi**: Swangger
 
 ## Prerequisites
 
@@ -71,6 +72,13 @@ Production mode:
 
 ```bash
 bun run start
+```
+
+## Swanger
+Untuk Dokumentasi Api 
+
+```bash
+http://localhost:${PORT}/api-docs
 ```
 
 
