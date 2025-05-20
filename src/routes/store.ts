@@ -14,12 +14,6 @@ import {
   UpdateStoreDto,
 } from "../dtos/store.dto";
 
-/**
- * @swagger
- * tags:
- *   name: Stores
- *   description: Store management endpoints
- */
 const router = Router();
 
 /**

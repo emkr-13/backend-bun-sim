@@ -9,12 +9,6 @@ import { validateDto } from "../middleware/validationMiddleware";
 import { LoginDto, RefreshTokenDto, RegisterDto } from "../dtos/auth.dto";
 import { authenticate } from "../middleware/authMiddleware";
 
-/**
- * @swagger
- * tags:
- *   name: Authentication
- *   description: Authentication endpoints
- */
 const router = Router();
 
 /**

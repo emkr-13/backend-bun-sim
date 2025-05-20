@@ -14,12 +14,6 @@ import {
   UpdateProductDto,
 } from "../dtos/product.dto";
 
-/**
- * @swagger
- * tags:
- *   name: Products
- *   description: Product management endpoints
- */
 const router = Router();
 
 /**

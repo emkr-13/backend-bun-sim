@@ -14,12 +14,6 @@ import {
   AkunDetailDto,
 } from "../dtos/akun.dto";
 
-/**
- * @swagger
- * tags:
- *   name: Akun
- *   description: Account management endpoints
- */
 const router = Router();
 
 /**

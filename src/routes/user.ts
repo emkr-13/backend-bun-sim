@@ -6,12 +6,6 @@ import {
 import { validateDto } from "../middleware/validationMiddleware";
 import { ChangePasswordDto, UpdateUserDto } from "../dtos/user.dto";
 
-/**
- * @swagger
- * tags:
- *   name: User
- *   description: User management endpoints
- */
 const router = Router();
 
 /**

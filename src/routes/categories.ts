@@ -14,12 +14,6 @@ import {
   UpdateCategoryDto,
 } from "../dtos/category.dto";
 
-/**
- * @swagger
- * tags:
- *   name: Categories
- *   description: Category management endpoints
- */
 const router = Router();
 
 /**

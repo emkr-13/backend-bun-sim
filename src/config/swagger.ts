@@ -16,6 +16,33 @@ const options: swaggerJsdoc.Options = {
       },
     ],
     schemes: ["http", "https"],
+    tags: [
+      {
+        name: "User",
+        description: "User management endpoints",
+      },
+      {
+        name: "Authentication",
+        description:
+          "Authentication endpoints for login, register, and token management",
+      },
+      {
+        name: "Akun",
+        description: "Account management endpoints",
+      },
+      {
+        name: "Products",
+        description: "Product management endpoints",
+      },
+      {
+        name: "Categories",
+        description: "Category management endpoints",
+      },
+      {
+        name: "Stores",
+        description: "Store management endpoints",
+      },
+    ],
     components: {
       securitySchemes: {
         bearerAuth: {
