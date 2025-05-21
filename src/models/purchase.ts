@@ -24,11 +24,9 @@ export const purchases = pgTable("purchases", {
   invoiceNumber: varchar("invoice_number", { length: 50 }).notNull().unique(),
   purchaseDate: timestamp("purchase_date").notNull(),
   supplierId: integer("supplier_id")
-    .references(() => akuns.id, { onDelete: "restrict" })
-    .notNull(),
+    .references(() => akuns.id, { onDelete: "restrict" }),
   storeId: integer("store_id")
-    .references(() => store.id, { onDelete: "restrict" })
-    .notNull(),
+    .references(() => store.id, { onDelete: "restrict" }),
   totalAmount: decimal("total_amount", { precision: 12, scale: 2 }).notNull(),
   discountAmount: decimal("discount_amount", {
     precision: 12,

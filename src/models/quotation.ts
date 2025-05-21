@@ -28,11 +28,9 @@ export const quotations = pgTable("quotations", {
     .unique(),
   quotationDate: date("quotation_date").notNull(),
   customerId: integer("customer_id")
-    .references(() => akuns.id, { onDelete: "restrict" })
-    .notNull(),
+    .references(() => akuns.id, { onDelete: "restrict" }),
   storeId: integer("store_id")
-    .references(() => store.id, { onDelete: "restrict" })
-    .notNull(),
+    .references(() => store.id, { onDelete: "restrict" }),
   subtotal: decimal("subtotal", { precision: 12, scale: 2 }).notNull(),
   discountAmount: decimal("discount_amount", {
     precision: 12,
