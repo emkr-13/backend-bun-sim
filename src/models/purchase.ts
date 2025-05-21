@@ -30,7 +30,6 @@ export const purchases = pgTable("purchases", {
     .references(() => store.id, { onDelete: "restrict" })
     .notNull(),
   totalAmount: decimal("total_amount", { precision: 12, scale: 2 }).notNull(),
-  taxAmount: decimal("tax_amount", { precision: 12, scale: 2 }).default("0"),
   discountAmount: decimal("discount_amount", {
     precision: 12,
     scale: 2,

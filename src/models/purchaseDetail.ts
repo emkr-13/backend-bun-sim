@@ -22,7 +22,5 @@ export const purchaseDetails = pgTable("purchase_details", {
   unitPrice: decimal("unit_price", { precision: 12, scale: 2 }).notNull(),
   discount: decimal("discount", { precision: 5, scale: 2 }).default("0"),
   subtotal: decimal("subtotal", { precision: 12, scale: 2 }).notNull(),
-  batchNumber: varchar("batch_number", { length: 50 }),
-  expiryDate: timestamp("expiry_date"),
   notes: text("notes"),
 });

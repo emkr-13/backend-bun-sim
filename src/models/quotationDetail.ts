@@ -19,7 +19,6 @@ export const quotationDetails = pgTable("quotation_details", {
   quantity: integer("quantity").notNull(),
   unitPrice: decimal("unit_price", { precision: 12, scale: 2 }).notNull(),
   discount: decimal("discount", { precision: 5, scale: 2 }).default("0"),
-  taxRate: decimal("tax_rate", { precision: 5, scale: 2 }).default("0"),
   subtotal: decimal("subtotal", { precision: 12, scale: 2 }).notNull(),
   description: text("description"),
   notes: text("notes"),
