@@ -45,6 +45,10 @@ const options: swaggerJsdoc.Options = {
         name: "Stores",
         description: "Store management endpoints",
       },
+      {
+        name: "Quotation",
+        description: "Quotation management endpoints",
+      },
     ],
     components: {
       securitySchemes: {
