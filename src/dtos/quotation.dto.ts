@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import {
   IsString,
   IsNumber,
@@ -185,5 +186,5 @@ export class UpdateQuotationStatusDto {
 
   @IsNotEmpty()
   @IsEnum(quotationStatus.enumValues)
-  status!: typeof quotationStatus.enumValues[number];
-} 
+  status!: (typeof quotationStatus.enumValues)[number];
+}
