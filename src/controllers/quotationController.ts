@@ -249,6 +249,27 @@ export const updateQuotationStatus = async (
     try {
       const result = await quotationService.updateQuotationStatus(id, status);
 
+      // For accepted quotations, include additional information in the response
+      if (status === "accepted") {
+        const updatedQuotation = await quotationService.getQuotationById(id);
+
+        sendResponse(
+          res,
+          200,
+          "Quotation accepted and stock updated successfully",
+          {
+            quotation: result[0],
+            details: updatedQuotation?.details || [],
+            message:
+              "Stock has been automatically reduced for all products in this quotation",
+          },
+          {
+            action: "Accept quotation and update stock",
+          }
+        );
+        return;
+      }
+
       sendResponse(
         res,
         200,
@@ -266,6 +287,14 @@ export const updateQuotationStatus = async (
 
       if (error.message.includes("not found")) {
         sendResponse(res, 404, "Quotation not found");
+        return;
+      }
+
+      if (error.message.includes("Insufficient stock")) {
+        sendResponse(res, 400, error.message, {
+          error: "INSUFFICIENT_STOCK",
+          details: error.message,
+        });
         return;
       }
 
