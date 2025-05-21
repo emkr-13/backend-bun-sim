@@ -12,10 +12,13 @@ const options: swaggerJsdoc.Options = {
     servers: [
       {
         url: `http://localhost:${process.env.APP_PORT || 3000}`,
-        description: "Development server",
+        description: "Development server (HTTP)",
+      },
+      {
+        url: `https://localhost:${process.env.APP_PORT || 3000}`,
+        description: "Development server (HTTPS)",
       },
     ],
-    schemes: ["http", "https"],
     tags: [
       {
         name: "User",

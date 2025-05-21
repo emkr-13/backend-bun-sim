@@ -14,7 +14,14 @@ export interface IUserRepository {
 
 export class UserRepository implements IUserRepository {
   async findUserById(userId: string): Promise<any> {
-    const [user] = await db.select().from(users).where(eq(users.id, userId));
+    const [user] = await db
+      .select({
+        fullname: users.fullname,
+        email: users.email,
+        createdAt: users.createdAt,
+        updatedAt: users.updatedAt,
+      })
+      .from(users).where(eq(users.id, userId));
     return user;
   }
 

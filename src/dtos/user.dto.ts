@@ -34,10 +34,6 @@ export class UpdateUserDto {
  *     UserProfileDto:
  *       type: object
  *       properties:
- *         id:
- *           type: string
- *           format: uuid
- *           description: User ID
  *         email:
  *           type: string
  *           format: email
@@ -55,8 +51,6 @@ export class UpdateUserDto {
  *           description: User last update date
  */
 export class UserProfileDto {
-  @IsUUID()
-  id!: string;
 
   @IsEmail()
   email!: string;

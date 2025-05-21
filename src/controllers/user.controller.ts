@@ -103,7 +103,7 @@ export const updateUserProfile = async (
     const updatedUser = await userService.editUser(userId, fullname);
 
     // Use enhanced response helper with action details
-    sendResponse(res, 200, "User profile updated successfully", updatedUser, {
+    sendResponse(res, 200, "User profile updated successfully", {
       action: "Profile update",
     });
   } catch (error: any) {
