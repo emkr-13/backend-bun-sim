@@ -13,6 +13,7 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
     "@types/jsonwebtoken": "^9.0.9",
+    "@types/pdfkit": "^0.13.9",
     "@types/pino-multi-stream": "^5.1.6",
     "nodemon": "^3.1.10"
   },
@@ -30,8 +31,10 @@
     "dotenv": "^16.5.0",
     "drizzle-kit": "^0.31.0",
     "drizzle-orm": "^0.43.1",
+    "exceljs": "^4.4.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "pdfkit": "^0.17.1",
     "pg": "^8.15.6",
     "pino": "^9.6.0",
     "pino-multi-stream": "^6.0.0",
@@ -40,6 +43,7 @@
     "reflect-metadata": "^0.2.2",
     "rotating-file-stream": "^3.2.6",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "xlsx": "^0.18.5"
   }
 }

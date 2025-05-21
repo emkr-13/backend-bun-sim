@@ -5,6 +5,8 @@ import {
   updateProduct,
   deleteProduct,
   getProductDetail,
+  exportProductsToPdf,
+  exportProductsToExcel,
 } from "../controllers/product.controller";
 import { validateDto } from "../middleware/validationMiddleware";
 import {
@@ -67,6 +69,60 @@ const router = Router();
  *         description: Server error
  */
 router.get("/all", listProducts);
+
+/**
+ * @swagger
+ * /api/products/export/pdf:
+ *   get:
+ *     summary: Export products list to PDF
+ *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: title
+ *         schema:
+ *           type: string
+ *         description: Custom title for the report
+ *     responses:
+ *       200:
+ *         description: PDF file
+ *         content:
+ *           application/pdf:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       500:
+ *         description: Server error
+ */
+router.get("/export/pdf", exportProductsToPdf);
+
+/**
+ * @swagger
+ * /api/products/export/excel:
+ *   get:
+ *     summary: Export products list to Excel
+ *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: title
+ *         schema:
+ *           type: string
+ *         description: Custom title for the report
+ *     responses:
+ *       200:
+ *         description: Excel file
+ *         content:
+ *           application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       500:
+ *         description: Server error
+ */
+router.get("/export/excel", exportProductsToExcel);
 
 /**
  * @swagger

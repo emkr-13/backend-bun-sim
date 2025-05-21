@@ -1,5 +1,6 @@
 import { db } from "../config/db";
 import { products } from "../models/products";
+import { categories } from "../models/categories";
 import { eq, sql, ilike, and, isNull, desc, asc } from "drizzle-orm";
 
 export interface IProductRepository {
@@ -37,6 +38,7 @@ export interface IProductRepository {
     sortOrder?: "asc" | "desc";
   }): Promise<{ data: any[]; total: number }>;
 
+  listProductsForExport(): Promise<any[]>;
   productExistsBySku(sku: string): Promise<boolean>;
   productExistsById(id: number): Promise<boolean>;
 }
@@ -128,8 +130,21 @@ export class ProductRepository implements IProductRepository {
     }
 
     const data = await db
-      .select()
+      .select({
+        id: products.id,
+        name: products.name,
+        description: products.description,
+        sku: products.sku,
+        stock: products.stock,
+        categoryId: products.categoryId,
+        categoryName: categories.name,
+        price_sell: products.price_sell,
+        price_cost: products.price_cost,
+        createdAt: products.createdAt,
+        updatedAt: products.updatedAt,
+      })
       .from(products)
+      .leftJoin(categories, eq(products.categoryId, categories.id))
       .where(whereConditions)
       .orderBy(orderBy)
       .limit(limit)
@@ -144,6 +159,24 @@ export class ProductRepository implements IProductRepository {
       data,
       total: total.count,
     };
+  }
+
+  async listProductsForExport(): Promise<any[]> {
+    return await db
+      .select({
+        id: products.id,
+        name: products.name,
+        sku: products.sku,
+        stock: products.stock,
+        categoryId: products.categoryId,
+        categoryName: categories.name,
+        price_sell: products.price_sell,
+        price_cost: products.price_cost,
+      })
+      .from(products)
+      .leftJoin(categories, eq(products.categoryId, categories.id))
+      .where(isNull(products.deletedAt))
+      .orderBy(asc(products.name));
   }
 
   async productExistsBySku(sku: string): Promise<boolean> {

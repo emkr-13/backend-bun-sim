@@ -124,4 +124,15 @@ export class ProductService {
       pagination: paginationResult,
     };
   }
+
+  async getProductsForExport() {
+    try {
+      const products = await this.productRepository.listProductsForExport();
+      logger.info("Products for export retrieved successfully");
+      return products;
+    } catch (error) {
+      logger.error("Error retrieving products for export", error);
+      throw new Error("Failed to retrieve products for export");
+    }
+  }
 }

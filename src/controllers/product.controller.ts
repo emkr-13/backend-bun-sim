@@ -10,6 +10,7 @@ import {
   UpdateProductDto,
 } from "../dtos/product.dto";
 import { BaseDto } from "../dtos/base.dto";
+import { exportToPdf, exportToExcel } from "../utils/exportUtils";
 
 const productRepository = new ProductRepository();
 const productService = new ProductService(productRepository);
@@ -288,5 +289,93 @@ export const listProducts = async (
   } catch (error: any) {
     logApiError(500, error.message, `${req.baseUrl}${req.path}`, error);
     sendResponse(res, 500, error.message);
+  }
+};
+
+/**
+ * @swagger
+ * /api/products/export/pdf:
+ *   get:
+ *     summary: Export products list to PDF
+ *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: title
+ *         schema:
+ *           type: string
+ *         description: Custom title for the report
+ *     responses:
+ *       200:
+ *         description: PDF file
+ *         content:
+ *           application/pdf:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       500:
+ *         description: Server error
+ */
+export const exportProductsToPdf = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const title = (req.query.title as string) || "Products Report";
+    const products = await productService.getProductsForExport();
+
+    // Stream PDF to client
+    exportToPdf(res, products, title);
+
+    // No need for sendResponse as exportToPdf handles the response
+    logger.info("Products exported to PDF successfully");
+  } catch (error: any) {
+    logApiError(500, error.message, `${req.baseUrl}${req.path}`, error);
+    sendResponse(res, 500, "Failed to export products to PDF");
+  }
+};
+
+/**
+ * @swagger
+ * /api/products/export/excel:
+ *   get:
+ *     summary: Export products list to Excel
+ *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: title
+ *         schema:
+ *           type: string
+ *         description: Custom title for the report
+ *     responses:
+ *       200:
+ *         description: Excel file
+ *         content:
+ *           application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       500:
+ *         description: Server error
+ */
+export const exportProductsToExcel = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const title = (req.query.title as string) || "Products Report";
+    const products = await productService.getProductsForExport();
+
+    // Stream Excel to client
+    await exportToExcel(res, products, title);
+
+    // No need for sendResponse as exportToExcel handles the response
+    logger.info("Products exported to Excel successfully");
+  } catch (error: any) {
+    logApiError(500, error.message, `${req.baseUrl}${req.path}`, error);
+    sendResponse(res, 500, "Failed to export products to Excel");
   }
 };
