@@ -59,6 +59,44 @@ export const createQuotation = async (
  *     tags: [Quotation]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of items per page
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search term for quotation number, customer name, or store name
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [draft, sent, accepted, rejected, expired, converted]
+ *         description: Filter by status
+ *       - in: query
+ *         name: sortBy
+ *         schema:
+ *           type: string
+ *           enum: [quotationNumber, quotationDate, grandTotal, status, createdAt]
+ *           default: createdAt
+ *         description: Field to sort by
+ *       - in: query
+ *         name: sortOrder
+ *         schema:
+ *           type: string
+ *           enum: [asc, desc]
+ *           default: desc
+ *         description: Sort order
  *     responses:
  *       200:
  *         description: List of quotations
@@ -70,9 +108,60 @@ export const getAllQuotations = async (
   res: Response
 ): Promise<void> => {
   try {
-    const quotations = await quotationService.getAllQuotations();
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const search = req.query.search as string | undefined;
+    const status = req.query.status as
+      | (typeof quotationStatus.enumValues)[number]
+      | undefined;
+    const sortBy = (req.query.sortBy as string) || "createdAt";
+    const sortOrder = (req.query.sortOrder as "asc" | "desc") || "desc";
 
-    sendResponse(res, 200, "Quotations retrieved successfully", quotations, {
+    // Validate sortBy field
+    const validSortFields = [
+      "quotationNumber",
+      "quotationDate",
+      "grandTotal",
+      "status",
+      "createdAt",
+    ];
+    if (sortBy && !validSortFields.includes(sortBy)) {
+      sendResponse(
+        res,
+        400,
+        `Invalid sortBy field. Must be one of: ${validSortFields.join(", ")}`
+      );
+      return;
+    }
+
+    // Validate sortOrder
+    if (sortOrder && !["asc", "desc"].includes(sortOrder)) {
+      sendResponse(res, 400, "Invalid sortOrder. Must be 'asc' or 'desc'");
+      return;
+    }
+
+    // Validate status if provided
+    if (status && !quotationStatus.enumValues.includes(status)) {
+      sendResponse(
+        res,
+        400,
+        `Invalid status. Must be one of: ${quotationStatus.enumValues.join(
+          ", "
+        )}`
+      );
+      return;
+    }
+
+    const result = await quotationService.getAllQuotations({
+      page,
+      limit,
+      search,
+      status,
+      sortBy,
+      sortOrder,
+    });
+
+    sendResponse(res, 200, "Quotations retrieved successfully", result, {
       action: "Fetch all quotations",
     });
   } catch (error) {
@@ -144,7 +233,7 @@ export const getQuotationDetail = async (
  *       200:
  *         description: Quotation status updated
  *       400:
- *         description: Invalid status
+ *         description: Invalid status or cannot update status due to business rules
  *       404:
  *         description: Quotation not found
  *       500:
@@ -157,16 +246,31 @@ export const updateQuotationStatus = async (
   try {
     const { id, status } = req.body as UpdateQuotationStatusDto;
 
-    const result = await quotationService.updateQuotationStatus(id, status);
+    try {
+      const result = await quotationService.updateQuotationStatus(id, status);
 
-    if (!result || result.length === 0) {
-      sendResponse(res, 404, "Quotation not found");
-      return;
+      sendResponse(
+        res,
+        200,
+        "Quotation status updated successfully",
+        result[0],
+        {
+          action: "Update quotation status",
+        }
+      );
+    } catch (error: any) {
+      if (error.message.includes("already been accepted")) {
+        sendResponse(res, 400, error.message);
+        return;
+      }
+
+      if (error.message.includes("not found")) {
+        sendResponse(res, 404, "Quotation not found");
+        return;
+      }
+
+      throw error; // Re-throw for the outer catch
     }
-
-    sendResponse(res, 200, "Quotation status updated successfully", result[0], {
-      action: "Update quotation status",
-    });
   } catch (error) {
     console.error("Error updating quotation status:", error);
     sendResponse(res, 500, "Failed to update quotation status", error);

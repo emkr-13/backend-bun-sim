@@ -1,5 +1,6 @@
 import { quotationStatus } from "../models/quotation";
 import quotationRepository from "../repositories/quotationRepository";
+import { pagination } from "../utils/helper";
 
 export class QuotationService {
   async createQuotation(quotationData: any, quotationDetailsData: any[]) {
@@ -42,8 +43,25 @@ export class QuotationService {
     );
   }
 
-  async getAllQuotations() {
-    return await quotationRepository.findAll();
+  async getAllQuotations(options: {
+    page: number;
+    limit: number;
+    search?: string;
+    status?: (typeof quotationStatus.enumValues)[number];
+    sortBy?: string;
+    sortOrder?: "asc" | "desc";
+  }) {
+    const result = await quotationRepository.findAll(options);
+    const paginationResult = await pagination(
+      result.total,
+      options.page,
+      options.limit
+    );
+
+    return {
+      data: result.data,
+      pagination: paginationResult,
+    };
   }
 
   async getQuotationById(id: number) {
@@ -54,6 +72,23 @@ export class QuotationService {
     id: number,
     status: (typeof quotationStatus.enumValues)[number]
   ) {
+    // Get the current status of the quotation
+    const currentStatus = await quotationRepository.getQuotationStatus(id);
+
+    if (!currentStatus) {
+      throw new Error("Quotation not found");
+    }
+
+    // Business rule: Cannot reject if status is already accepted
+    if (status === "rejected" && currentStatus === "accepted") {
+      throw new Error("Cannot reject quotation that has already been accepted");
+    }
+
+    // Additional business rules could be added here
+    // For example:
+    // - Cannot update status if already converted
+    // - Only allow specific status transitions
+
     return await quotationRepository.updateStatus(id, status);
   }
 }
