@@ -25,7 +25,6 @@ export const stockMovements = pgTable("stock_movements", {
   storeId: integer("store_id").references(() => store.id, {
     onDelete: "restrict",
   }),
-
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
   deletedAt: timestamp("deleted_at"),

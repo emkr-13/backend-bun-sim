@@ -19,7 +19,7 @@ import { IsEmail, IsNotEmpty, IsString, MinLength } from "class-validator";
  *           format: password
  *           description: User password
  *       example:
- *         email: user@example.com
+ *         email: admin@mail.com
  *         password: password123
  */
 export class LoginDto {
