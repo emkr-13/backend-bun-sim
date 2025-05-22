@@ -4,6 +4,7 @@ import {
   IsOptional,
   IsNotEmpty,
   Min,
+  IsEnum,
 } from "class-validator";
 
 /**
@@ -16,6 +17,7 @@ import {
  *         - name
  *         - price
  *         - categoryId
+ *         - satuan
  *       properties:
  *         name:
  *           type: string
@@ -29,6 +31,10 @@ import {
  *         categoryId:
  *           type: integer
  *           description: The category ID
+ *         satuan:
+ *           type: string
+ *           enum: [pcs, box, kg]
+ *           description: The product unit of measurement
  */
 export class CreateProductDto {
   @IsNotEmpty()
@@ -48,6 +54,12 @@ export class CreateProductDto {
   @IsNumber()
   @Min(1)
   categoryId!: number;
+
+  @IsNotEmpty()
+  @IsEnum(["pcs", "box", "kg"], {
+    message: "satuan must be one of: pcs, box, kg",
+  })
+  satuan!: "pcs" | "box" | "kg";
 }
 
 /**
@@ -74,6 +86,10 @@ export class CreateProductDto {
  *         categoryId:
  *           type: integer
  *           description: The category ID
+ *         satuan:
+ *           type: string
+ *           enum: [pcs, box, kg]
+ *           description: The product unit of measurement
  */
 export class UpdateProductDto {
   @IsNotEmpty()
@@ -98,6 +114,12 @@ export class UpdateProductDto {
   @IsNumber()
   @Min(1)
   categoryId?: number;
+
+  @IsOptional()
+  @IsEnum(["pcs", "box", "kg"], {
+    message: "satuan must be one of: pcs, box, kg",
+  })
+  satuan?: "pcs" | "box" | "kg";
 }
 
 /**

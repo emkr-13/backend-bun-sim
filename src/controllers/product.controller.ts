@@ -44,16 +44,16 @@ export const createProduct = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { name, description, price, categoryId } =
+    const { name, description, price, categoryId, satuan } =
       req.body as CreateProductDto;
 
     await productService.createProduct({
       name,
       description,
       categoryId,
+      satuan,
       // Add any other required fields with default values if needed
       sku: `SKU-${Date.now()}`,
-      stock: 0,
       price_sell: price.toString(),
       price_cost: (price * 0.7).toString(),
     });
@@ -99,13 +99,14 @@ export const updateProduct = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { id, name, description, categoryId, price } =
+    const { id, name, description, categoryId, price, satuan } =
       req.body as UpdateProductDto;
 
     await productService.updateProduct(id, {
       name,
       description,
       categoryId,
+      satuan,
       price_sell: price ? price.toString() : undefined,
       price_cost: price ? (price * 0.7).toString() : undefined,
       // Add other fields as needed

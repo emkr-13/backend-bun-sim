@@ -8,8 +8,8 @@ export interface IProductRepository {
     name: string;
     description?: string;
     sku: string;
-    stock: number;
     categoryId: number;
+    satuan: "pcs" | "box" | "kg";
     price_sell: string;
     price_cost: string;
   }): Promise<void>;
@@ -20,8 +20,8 @@ export interface IProductRepository {
       name?: string;
       description?: string;
       sku?: string;
-      stock?: number;
       categoryId?: number;
+      satuan?: "pcs" | "box" | "kg";
       price_sell?: string;
       price_cost?: string;
     }
@@ -48,12 +48,15 @@ export class ProductRepository implements IProductRepository {
     name: string;
     description?: string;
     sku: string;
-    stock: number;
     categoryId: number;
+    satuan: "pcs" | "box" | "kg";
     price_sell: string;
     price_cost: string;
   }): Promise<void> {
-    await db.insert(products).values(data);
+    await db.insert(products).values({
+      ...data,
+      stock: 0,
+    });
   }
 
   async updateProduct(
@@ -62,8 +65,8 @@ export class ProductRepository implements IProductRepository {
       name?: string;
       description?: string;
       sku?: string;
-      stock?: number;
       categoryId?: number;
+      satuan?: "pcs" | "box" | "kg";
       price_sell?: string;
       price_cost?: string;
     }
@@ -136,6 +139,7 @@ export class ProductRepository implements IProductRepository {
         description: products.description,
         sku: products.sku,
         stock: products.stock,
+        satuan: products.satuan,
         categoryId: products.categoryId,
         categoryName: categories.name,
         price_sell: products.price_sell,
@@ -168,6 +172,7 @@ export class ProductRepository implements IProductRepository {
         name: products.name,
         sku: products.sku,
         stock: products.stock,
+        satuan: products.satuan,
         categoryId: products.categoryId,
         categoryName: categories.name,
         price_sell: products.price_sell,

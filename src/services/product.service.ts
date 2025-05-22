@@ -9,8 +9,8 @@ export class ProductService {
     name: string;
     description?: string;
     sku: string;
-    stock: number;
     categoryId: number;
+    satuan: "pcs" | "box" | "kg";
     price_sell: string;
     price_cost: string;
   }) {
@@ -18,20 +18,17 @@ export class ProductService {
       !data.name ||
       !data.sku ||
       !data.categoryId ||
+      !data.satuan ||
       !data.price_sell ||
       !data.price_cost
     ) {
       throw new Error(
-        "Required fields: name, sku, categoryId, price_sell, price_cost"
+        "Required fields: name, sku, categoryId, satuan, price_sell, price_cost"
       );
     }
 
     if (await this.productRepository.productExistsBySku(data.sku)) {
       throw new Error("Product with this SKU already exists");
-    }
-
-    if (data.stock < 0) {
-      throw new Error("Stock cannot be negative");
     }
 
     await this.productRepository.createProduct(data);
@@ -44,8 +41,8 @@ export class ProductService {
       name?: string;
       description?: string;
       sku?: string;
-      stock?: number;
       categoryId?: number;
+      satuan?: "pcs" | "box" | "kg";
       price_sell?: string;
       price_cost?: string;
     }
@@ -66,10 +63,6 @@ export class ProductService {
       if (existingProduct.sku !== data.sku) {
         throw new Error("Another product with this SKU already exists");
       }
-    }
-
-    if (data.stock && data.stock < 0) {
-      throw new Error("Stock cannot be negative");
     }
 
     await this.productRepository.updateProduct(id, data);
