@@ -1,5 +1,5 @@
-import express from "express";
-import cors from "cors";
+const express = require("express");
+const cors = require("cors");
 
 const app = express();
 
@@ -15,8 +15,5 @@ app.get("/", (req, res) => {
   });
 });
 
-// API routes - commented out until database connection is configured
-// app.use("/api", routes);
-
 // Export the Express app for Vercel
-export default app;
+module.exports = app;

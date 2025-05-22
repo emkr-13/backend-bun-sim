@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "dev": "nodemon src/server.ts",
-    "start": "nodemon src/server.ts"
+    "start": "nodemon src/server.ts",
+    "vercel-build": "echo 'Building for Vercel'"
   },
   "devDependencies": {
     "@types/bcryptjs": "^3.0.0",
@@ -45,5 +46,8 @@
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "xlsx": "^0.18.5"
+  },
+  "engines": {
+    "node": "18.x"
   }
 }
