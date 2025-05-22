@@ -25,9 +25,16 @@ app.use("/api", routes);
 // Error logger middleware
 app.use(errorLogger);
 
-// Start the server
-app.listen(PORT, () => {
-  logger.info(`Server running on port ${PORT}`);
-  logger.info(`Access the application at http://localhost:${PORT}`);
-  logger.info(`Access API documentation at http://localhost:${PORT}/api-docs`);
-});
+// Start the server if we're not in a serverless environment
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => {
+    logger.info(`Server running on port ${PORT}`);
+    logger.info(`Access the application at http://localhost:${PORT}`);
+    logger.info(
+      `Access API documentation at http://localhost:${PORT}/api-docs`
+    );
+  });
+}
+
+// Export the Express app for Vercel
+export default app;

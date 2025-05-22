@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "nodemon src/server.ts",
     "start": "nodemon src/server.ts",
-    "build": "tsc",
-    "vercel-build": "tsc --project tsconfig.vercel.json"
+    "build": "echo 'No build step needed'",
+    "vercel-build": "echo 'Vercel will handle the build'"
   },
   "devDependencies": {
     "@types/bcryptjs": "^3.0.0",

@@ -2,22 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/index.ts",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "api/health.ts",
+      "src": "src/server.ts",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-      "src": "/health",
-      "dest": "api/health.ts"
-    },
-    {
       "src": "/(.*)",
-      "dest": "api/index.ts"
+      "dest": "src/server.ts"
     }
   ],
   "env": {

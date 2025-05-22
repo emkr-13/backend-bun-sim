@@ -28,38 +28,49 @@ import { multistream } from "pino-multi-stream";
 // Helper function for formatting date
 const pad = (num: number) => (num > 9 ? "" : "0") + num;
 
-// Create a rotating log stream
-const logDirectory = path.join(process.cwd(), "logs"); // Directory to store logs
+let logger: pino.Logger;
 
-const logStream = createStream(
-  () => {
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = pad(date.getMonth() + 1);
-    const day = pad(date.getDate());
-    return `app-${year}-${month}-${day}.log`;
-  },
-  {
-    interval: "1d", // Rotate logs daily
-    path: logDirectory, // Directory to store logs
-  }
-);
-
-// Combine console and file streams using pino-multi-stream
-const streams = [
-  { stream: process.stdout }, // Log to console
-  { stream: logStream }, // Log to file
-];
-
-// Create a Pino logger instance with multi-stream
-const logger = pino(
-  {
-    level: "info", // Default log level
-    base: null, // Disable default metadata (hostname, pid)
+// In production (serverless) environment, only log to console
+if (process.env.NODE_ENV === "production") {
+  logger = pino({
+    level: "info",
+    base: null,
     timestamp: () => `,"time":"${new Date().toISOString()}"`,
-  },
-  multistream(streams) // Use multistream to combine streams
-);
+  });
+} else {
+  // Create a rotating log stream for development
+  const logDirectory = path.join(process.cwd(), "logs"); // Directory to store logs
+
+  const logStream = createStream(
+    () => {
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = pad(date.getMonth() + 1);
+      const day = pad(date.getDate());
+      return `app-${year}-${month}-${day}.log`;
+    },
+    {
+      interval: "1d", // Rotate logs daily
+      path: logDirectory, // Directory to store logs
+    }
+  );
+
+  // Combine console and file streams using pino-multi-stream
+  const streams = [
+    { stream: process.stdout }, // Log to console
+    { stream: logStream }, // Log to file
+  ];
+
+  // Create a Pino logger instance with multi-stream
+  logger = pino(
+    {
+      level: "info", // Default log level
+      base: null, // Disable default metadata (hostname, pid)
+      timestamp: () => `,"time":"${new Date().toISOString()}"`,
+    },
+    multistream(streams) // Use multistream to combine streams
+  );
+}
 
 /**
  * Log API errors with additional context
