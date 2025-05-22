@@ -1,16 +1,28 @@
 import PDFDocument from "pdfkit";
 import ExcelJS from "exceljs";
 import { Response } from "express";
+import fs from "fs";
+import path from "path";
 
 interface ProductData {
   id: number;
   name: string;
   sku: string;
   stock: number;
+  satuan: string;
   categoryName: string;
   price_sell: string;
   price_cost: string;
 }
+
+// Company information for reports
+const companyInfo = {
+  name: "Demo Aplikasi",
+  address: "Jl. Raya Utama No. 123, Jakarta Selatan",
+  phone: "(021) 555-1234",
+  email: "info@demoaplikasi.com",
+  website: "www.demoaplikasi.com",
+};
 
 /**
  * Export products data to PDF format
@@ -36,20 +48,58 @@ export const exportToPdf = (
   // Pipe the PDF document to the response
   doc.pipe(res);
 
-  // Add title
-  doc.fontSize(20).text(title, { align: "center" });
+  // Get the logo path
+  const logoPath = path.join(
+    process.cwd(),
+    "public",
+    "images",
+    "logo_emkr_crop.png"
+  );
+
+  // Add logo if it exists
+  if (fs.existsSync(logoPath)) {
+    doc.image(logoPath, doc.page.width - 150, 50, { width: 100 });
+  }
+
+  // Add company header
+  doc.fontSize(20).font("Helvetica-Bold").text(companyInfo.name, 50, 50);
+  doc.fontSize(10).font("Helvetica").text(companyInfo.address, 50, 75);
+  doc.text(`Tel: ${companyInfo.phone} | Email: ${companyInfo.email}`, 50, 90);
+  doc.text(`Website: ${companyInfo.website}`, 50, 105);
+
+  // Add horizontal line
+  doc.moveDown(2);
+  doc
+    .moveTo(50, 130)
+    .lineTo(doc.page.width - 50, 130)
+    .stroke();
+
+  // Add report title
+  doc.moveDown();
+  doc.fontSize(16).font("Helvetica-Bold").text(title, { align: "center" });
   doc.moveDown();
 
   // Add current date
+  const formattedDate = new Date().toLocaleDateString("id-ID", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+
   doc
     .fontSize(10)
-    .text(`Generated on: ${new Date().toLocaleString()}`, { align: "right" });
+    .font("Helvetica")
+    .text(`Generated on: ${formattedDate}`, { align: "center" });
   doc.moveDown(2);
 
   // Define table layout
-  const tableTop = 150;
+  const tableTop = 200;
   const tableLeft = 50;
-  const colWidths = [150, 70, 50, 100, 70, 70]; // Column widths
+  const colWidths = [120, 70, 40, 50, 80, 70, 70]; // Column widths with added satuan column
   const rowHeight = 20;
 
   // Draw table headers
@@ -57,6 +107,7 @@ export const exportToPdf = (
     "Product Name",
     "SKU",
     "Stock",
+    "Satuan",
     "Category",
     "Price Sell",
     "Price Cost",
@@ -109,7 +160,7 @@ export const exportToPdf = (
     let x = tableLeft;
 
     // Product name
-    doc.text(product.name.toString().substring(0, 25), x + 5, y + 5, {
+    doc.text(product.name.toString().substring(0, 20), x + 5, y + 5, {
       width: colWidths[0] - 10,
     });
     x += colWidths[0];
@@ -126,21 +177,27 @@ export const exportToPdf = (
     });
     x += colWidths[2];
 
-    // Category
-    doc.text(product.categoryName.toString(), x + 5, y + 5, {
+    // Satuan
+    doc.text(product.satuan || "-", x + 5, y + 5, {
       width: colWidths[3] - 10,
     });
     x += colWidths[3];
 
-    // Price Sell
-    doc.text(product.price_sell.toString(), x + 5, y + 5, {
+    // Category
+    doc.text(product.categoryName.toString(), x + 5, y + 5, {
       width: colWidths[4] - 10,
     });
     x += colWidths[4];
 
-    // Price Cost
-    doc.text(product.price_cost.toString(), x + 5, y + 5, {
+    // Price Sell
+    doc.text(formatCurrency(product.price_sell.toString()), x + 5, y + 5, {
       width: colWidths[5] - 10,
+    });
+    x += colWidths[5];
+
+    // Price Cost
+    doc.text(formatCurrency(product.price_cost.toString()), x + 5, y + 5, {
+      width: colWidths[6] - 10,
     });
 
     y += rowHeight;
@@ -149,6 +206,42 @@ export const exportToPdf = (
     if (y > doc.page.height - 100) {
       doc.addPage();
       y = 50;
+
+      // Add page header on new page
+      doc
+        .fontSize(12)
+        .font("Helvetica-Bold")
+        .text(`${title} (continued)`, 50, 30);
+      doc
+        .fontSize(10)
+        .font("Helvetica")
+        .text(`Generated on: ${formattedDate}`, 50, 45);
+
+      // Re-draw table headers
+      const headerY = 70;
+      doc.fontSize(10).font("Helvetica-Bold");
+
+      doc
+        .fillColor("#f0f0f0")
+        .rect(
+          tableLeft,
+          headerY,
+          colWidths.reduce((a, b) => a + b, 0),
+          rowHeight
+        )
+        .fill();
+
+      doc.fillColor("#000000");
+      headers.forEach((header, i) => {
+        let x = tableLeft;
+        for (let j = 0; j < i; j++) {
+          x += colWidths[j];
+        }
+        doc.text(header, x + 5, headerY + 5);
+      });
+
+      y = headerY + rowHeight;
+      doc.font("Helvetica");
     }
   });
 
@@ -158,9 +251,30 @@ export const exportToPdf = (
       tableLeft,
       tableTop,
       colWidths.reduce((a, b) => a + b, 0),
-      Math.min(y - tableTop, doc.page.height - 100)
+      Math.min(y - tableTop, doc.page.height - 200)
     )
     .stroke();
+
+  // Add footer
+  const footerY = doc.page.height - 50;
+  doc
+    .fontSize(8)
+    .font("Helvetica-Bold")
+    .text(
+      `This is a computer-generated document. No signature is required.`,
+      50,
+      footerY,
+      { align: "center" }
+    );
+
+  doc
+    .fontSize(8)
+    .text(
+      `© ${new Date().getFullYear()} ${companyInfo.name}. All rights reserved.`,
+      50,
+      footerY + 15,
+      { align: "center" }
+    );
 
   // Finalize the PDF and end the stream
   doc.end();
@@ -181,18 +295,85 @@ export const exportToExcel = async (
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet("Products");
 
-  // Define columns
+  // Company information
+  worksheet.getCell("A1").value = companyInfo.name;
+  worksheet.getCell("A1").font = { bold: true, size: 16 };
+  worksheet.mergeCells("A1:G1");
+
+  worksheet.getCell("A2").value = companyInfo.address;
+  worksheet.mergeCells("A2:G2");
+
+  worksheet.getCell(
+    "A3"
+  ).value = `Tel: ${companyInfo.phone} | Email: ${companyInfo.email} | Website: ${companyInfo.website}`;
+  worksheet.mergeCells("A3:G3");
+
+  // Add logo if it exists
+  const logoPath = path.join(
+    process.cwd(),
+    "public",
+    "images",
+    "logo_emkr_crop.png"
+  );
+  if (fs.existsSync(logoPath)) {
+    const logo = workbook.addImage({
+      filename: logoPath,
+      extension: "png",
+    });
+
+    // Add logo to the top right
+    worksheet.addImage(logo, {
+      tl: { col: 6, row: 0 },
+      ext: { width: 100, height: 50 },
+    });
+  }
+
+  // Add horizontal line (using border)
+  ["A4", "B4", "C4", "D4", "E4", "F4", "G4"].forEach((cell) => {
+    worksheet.getCell(cell).border = {
+      bottom: { style: "medium" },
+    };
+  });
+  worksheet.mergeCells("A4:G4");
+
+  // Report title
+  worksheet.getCell("A5").value = title;
+  worksheet.getCell("A5").font = { bold: true, size: 14 };
+  worksheet.getCell("A5").alignment = { horizontal: "center" };
+  worksheet.mergeCells("A5:G5");
+
+  // Generated date
+  const formattedDate = new Date().toLocaleDateString("id-ID", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+
+  worksheet.getCell("A6").value = `Generated on: ${formattedDate}`;
+  worksheet.getCell("A6").font = { italic: true, size: 10 };
+  worksheet.getCell("A6").alignment = { horizontal: "center" };
+  worksheet.mergeCells("A6:G6");
+
+  // Add empty row for spacing
+  worksheet.getRow(7).height = 10;
+
+  // Define columns (starting at row 8)
   worksheet.columns = [
     { header: "Product Name", key: "name", width: 30 },
     { header: "SKU", key: "sku", width: 15 },
     { header: "Stock", key: "stock", width: 10 },
+    { header: "Satuan", key: "satuan", width: 10 },
     { header: "Category", key: "categoryName", width: 20 },
     { header: "Price Sell", key: "price_sell", width: 15 },
     { header: "Price Cost", key: "price_cost", width: 15 },
   ];
 
-  // Style the header row
-  const headerRow = worksheet.getRow(1);
+  // Style the header row (row 8)
+  const headerRow = worksheet.getRow(8);
   headerRow.font = { bold: true };
   headerRow.fill = {
     type: "pattern",
@@ -200,12 +381,33 @@ export const exportToExcel = async (
     fgColor: { argb: "FFE0E0E0" },
   };
   headerRow.alignment = { vertical: "middle", horizontal: "center" };
+  headerRow.height = 20;
 
-  // Add rows
-  worksheet.addRows(products);
+  // Add data rows (starting from row 9)
+  products.forEach((product) => {
+    const row = worksheet.addRow({
+      name: product.name,
+      sku: product.sku,
+      stock: product.stock,
+      satuan: product.satuan || "-",
+      categoryName: product.categoryName,
+      price_sell: product.price_sell,
+      price_cost: product.price_cost,
+    });
 
-  // Apply borders to all cells
-  worksheet.eachRow((row, rowNumber) => {
+    // Format currency cells
+    const sellPriceCell = row.getCell("price_sell");
+    const costPriceCell = row.getCell("price_cost");
+
+    sellPriceCell.numFmt = "#,##0.00";
+    costPriceCell.numFmt = "#,##0.00";
+  });
+
+  // Apply borders and styling to all data cells
+  for (let i = 8; i <= worksheet.rowCount; i++) {
+    const row = worksheet.getRow(i);
+
+    // Apply borders to all cells
     row.eachCell((cell) => {
       cell.border = {
         top: { style: "thin" },
@@ -213,33 +415,36 @@ export const exportToExcel = async (
         bottom: { style: "thin" },
         right: { style: "thin" },
       };
-
-      if (rowNumber > 1) {
-        // Align numbers to right
-        if (typeof cell.value === "number") {
-          cell.alignment = { horizontal: "right" };
-        }
-      }
     });
-  });
 
-  // Set title in a merged cell at the top
-  worksheet.insertRow(1, [title]);
-  worksheet.mergeCells("A1:F1");
-  const titleRow = worksheet.getRow(1);
-  titleRow.height = 30;
-  titleRow.font = { bold: true, size: 16 };
-  titleRow.alignment = { vertical: "middle", horizontal: "center" };
+    // Skip header row for alignment
+    if (i > 8) {
+      // Apply right alignment to specific columns
+      const stockCell = row.getCell(3); // Stock column
+      const priceSellCell = row.getCell(6); // Price Sell column
+      const priceCostCell = row.getCell(7); // Price Cost column
 
-  // Insert date
-  worksheet.insertRow(2, [`Generated on: ${new Date().toLocaleString()}`]);
-  worksheet.mergeCells("A2:F2");
-  const dateRow = worksheet.getRow(2);
-  dateRow.font = { italic: true, size: 10 };
-  dateRow.alignment = { horizontal: "right" };
+      stockCell.alignment = { horizontal: "right" };
+      priceSellCell.alignment = { horizontal: "right" };
+      priceCostCell.alignment = { horizontal: "right" };
+    }
+  }
 
-  // Add empty row for spacing
-  worksheet.insertRow(3, []);
+  // Add footer
+  const footerRow = worksheet.getRow(worksheet.rowCount + 2);
+  footerRow.getCell(1).value =
+    "This is a computer-generated document. No signature is required.";
+  worksheet.mergeCells(`A${footerRow.number}:G${footerRow.number}`);
+  footerRow.getCell(1).font = { italic: true, size: 8 };
+  footerRow.getCell(1).alignment = { horizontal: "center" };
+
+  const copyrightRow = worksheet.getRow(worksheet.rowCount + 1);
+  copyrightRow.getCell(1).value = `© ${new Date().getFullYear()} ${
+    companyInfo.name
+  }. All rights reserved.`;
+  worksheet.mergeCells(`A${copyrightRow.number}:G${copyrightRow.number}`);
+  copyrightRow.getCell(1).font = { italic: true, size: 8 };
+  copyrightRow.getCell(1).alignment = { horizontal: "center" };
 
   // Set response headers for Excel download
   res.setHeader(
@@ -254,3 +459,12 @@ export const exportToExcel = async (
   // Write to response
   await workbook.xlsx.write(res);
 };
+
+// Helper function to format currency
+function formatCurrency(value: string): string {
+  const num = parseFloat(value);
+  return num.toLocaleString("id-ID", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}

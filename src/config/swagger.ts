@@ -9,16 +9,16 @@ const options: swaggerJsdoc.Options = {
       version: "1.0.0",
       description: "API documentation for the backend application",
     },
-    servers: [
-      {
-        url: `http://localhost:${process.env.APP_PORT || 3000}`,
-        description: "Development server (HTTP)",
-      },
-      {
-        url: `https://localhost:${process.env.APP_PORT || 3000}`,
-        description: "Development server (HTTPS)",
-      },
-    ],
+    // servers: [
+    //   {
+    //     url: `http://localhost:${process.env.APP_PORT || 3000}`,
+    //     description: "Development server (HTTP)",
+    //   },
+    //   {
+    //     url: `https://localhost:${process.env.APP_PORT || 3000}`,
+    //     description: "Development server (HTTPS)",
+    //   },
+    // ],
     tags: [
       {
         name: "User",
