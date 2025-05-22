@@ -7,7 +7,7 @@ app.use(cors());
 app.use(express.json());
 
 // Simple root endpoint
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   res.status(200).json({
     status: "ok",
     message: "API is running",
@@ -15,8 +15,14 @@ app.get("/", (req, res) => {
   });
 });
 
-// API routes - commented out until database connection is configured
-// app.use("/api", routes);
+// Simple API endpoint to check service status
+app.get("/api/status", (_req, res) => {
+  res.status(200).json({
+    status: "ok",
+    message: "Service is running",
+    timestamp: new Date().toISOString(),
+  });
+});
 
 // Export the Express app for Vercel
 export default app;

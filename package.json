@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon src/server.ts",
     "start": "nodemon src/server.ts",
-    "vercel-build": "echo 'Building for Vercel'"
+    "build": "tsc",
+    "vercel-build": "tsc --project tsconfig.vercel.json"
   },
   "devDependencies": {
     "@types/bcryptjs": "^3.0.0",
@@ -16,7 +17,8 @@
     "@types/jsonwebtoken": "^9.0.9",
     "@types/pdfkit": "^0.13.9",
     "@types/pino-multi-stream": "^5.1.6",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "typescript": "^5.0.0"
   },
   "peerDependencies": {
     "typescript": "^5"
