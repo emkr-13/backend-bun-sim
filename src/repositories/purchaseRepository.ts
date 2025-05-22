@@ -154,6 +154,7 @@ export class PurchaseRepository {
         productId: purchaseDetails.productId,
         productName: products.name,
         quantity: purchaseDetails.quantity,
+        satuan: products.satuan,
         unitPrice: purchaseDetails.unitPrice,
         discount: purchaseDetails.discount,
         subtotal: purchaseDetails.subtotal,

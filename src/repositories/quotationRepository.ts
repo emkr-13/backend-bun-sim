@@ -151,6 +151,7 @@ export class QuotationRepository {
         productName: products.name,
         quantity: quotationDetails.quantity,
         unitPrice: quotationDetails.unitPrice,
+        satuan: products.satuan,
         discount: quotationDetails.discount,
         subtotal: quotationDetails.subtotal,
         description: quotationDetails.description,
