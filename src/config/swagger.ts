@@ -1,5 +1,12 @@
 import swaggerJsdoc from "swagger-jsdoc";
 
+// Determine the base URL based on environment
+const getBaseUrl = () => {
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+  return `http://localhost:${process.env.APP_PORT || 3000}`;
+};
 
 const options: swaggerJsdoc.Options = {
   definition: {
@@ -9,16 +16,12 @@ const options: swaggerJsdoc.Options = {
       version: "1.0.0",
       description: "API documentation for the backend application",
     },
-    // servers: [
-    //   {
-    //     url: `http://localhost:${process.env.APP_PORT || 3000}`,
-    //     description: "Development server (HTTP)",
-    //   },
-    //   {
-    //     url: `https://localhost:${process.env.APP_PORT || 3000}`,
-    //     description: "Development server (HTTPS)",
-    //   },
-    // ],
+    servers: [
+      {
+        url: getBaseUrl(),
+        description: "API Server",
+      },
+    ],
     tags: [
       {
         name: "User",
@@ -66,10 +69,7 @@ const options: swaggerJsdoc.Options = {
     ],
   },
   apis: [
-    "./src/routes/*.ts",
-    "./src/controllers/*.ts",
-    "./src/models/*.ts",
-    "./src/dtos/*.ts",
+    "./src/**/*.ts", // Include all TypeScript files in src directory
   ],
 };
 

@@ -16,8 +16,29 @@ app.use(express.json());
 // Apply request logger middleware
 app.use(requestLogger);
 
+// Add a simple test endpoint
+app.get("/test", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    message: "API is working",
+    environment: process.env.NODE_ENV,
+    vercelUrl: process.env.VERCEL_URL || "Not available",
+  });
+});
+
 // Swagger documentation
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    explorer: true,
+    customCss: ".swagger-ui .topbar { display: none }",
+    swaggerOptions: {
+      docExpansion: "none",
+      persistAuthorization: true,
+    },
+  })
+);
 
 // API routes
 app.use("/api", routes);
