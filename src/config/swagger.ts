@@ -5,7 +5,10 @@ const getBaseUrl = () => {
   if (process.env.VERCEL_URL) {
     return `https://${process.env.VERCEL_URL}`;
   }
-  return `http://localhost:${process.env.APP_PORT || 3000}`;
+  const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
+  const host =
+    process.env.VERCEL_URL || `localhost:${process.env.APP_PORT || 3000}`;
+  return `${protocol}://${host}`;
 };
 
 const options: swaggerJsdoc.Options = {

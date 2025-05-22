@@ -57,7 +57,5 @@ if (process.env.NODE_ENV !== "production") {
   });
 }
 
-// Export the Express app for Vercel
-module.exports = app;
-// For TypeScript compatibility
+// Export the Express app for Vercel deployment
 export default app;
