@@ -28,7 +28,7 @@ import { multistream } from "pino-multi-stream";
 // Helper function for formatting date
 const pad = (num: number) => (num > 9 ? "" : "0") + num;
 
-let logger: pino.Logger;
+let logger: any;
 
 // In production (serverless) environment, only log to console
 if (process.env.NODE_ENV === "production") {

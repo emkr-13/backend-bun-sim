@@ -1,7 +1,6 @@
 {
   "name": "backend-bun-sim",
   "module": "server.ts",
-  "type": "module",
   "private": true,
   "scripts": {
     "dev": "nodemon src/server.ts",
