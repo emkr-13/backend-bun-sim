@@ -4,7 +4,6 @@ import { purchaseDetails } from "../models/purchaseDetail";
 import { products } from "../models/products";
 import { stockMovements } from "../models/stockMovements";
 import { akuns } from "../models/akun";
-import { store } from "../models/store";
 import { faker } from "@faker-js/faker";
 import { eq, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/postgres-js";
@@ -19,22 +18,22 @@ interface PurchaseDetail {
   notes?: string | null;
 }
 
-async function seedPurchases() {
+async function seedPurchases(
+  monthlyHistoricalCount = 10,
+  currentMonthCount = 5
+) {
   console.log("Starting purchase seeder...");
 
-  // Retrieve all suppliers, stores, and products
+  // Retrieve all suppliers and products
   const allSuppliers = await db
     .select()
     .from(akuns)
     .where(eq(akuns.type, "supplier"));
 
   if (allSuppliers.length === 0) {
-    throw new Error("No suppliers found. Please seed akuns first.");
-  }
-
-  const allStores = await db.select().from(store);
-  if (allStores.length === 0) {
-    throw new Error("No stores found. Please seed stores first.");
+    throw new Error(
+      "No suppliers found. Please seed akuns first with supplier type."
+    );
   }
 
   const allProducts = await db.select().from(products);
@@ -47,10 +46,6 @@ async function seedPurchases() {
   const oneYearAgo = new Date();
   oneYearAgo.setFullYear(today.getFullYear() - 1);
   oneYearAgo.setDate(1); // Start from the 1st of month
-
-  // Lower the number of purchases for testing (adjust as needed)
-  const monthlyHistoricalCount = 150; // 100-150 in production
-  const currentMonthCount = 100; // 100-150 in production
 
   console.log(
     `Seeding ${monthlyHistoricalCount} purchases per month for the past year...`
@@ -80,13 +75,7 @@ async function seedPurchases() {
       // Choose random status (either received or cancelled for historical data)
       const status = faker.helpers.arrayElement(["received", "cancelled"]);
 
-      await createPurchase(
-        purchaseDate,
-        allSuppliers,
-        allStores,
-        allProducts,
-        status
-      );
+      await createPurchase(purchaseDate, allSuppliers, allProducts, status);
     }
   }
 
@@ -104,13 +93,7 @@ async function seedPurchases() {
       "cancelled",
     ]);
 
-    await createPurchase(
-      purchaseDate,
-      allSuppliers,
-      allStores,
-      allProducts,
-      status
-    );
+    await createPurchase(purchaseDate, allSuppliers, allProducts, status);
   }
 
   console.log("✅ Purchase seeding completed successfully");
@@ -119,13 +102,11 @@ async function seedPurchases() {
 async function createPurchase(
   purchaseDate: Date,
   suppliers: any[],
-  stores: any[],
   productsList: any[],
   status: string
 ) {
   // Generate random data
   const supplier = faker.helpers.arrayElement(suppliers);
-  const storeItem = faker.helpers.arrayElement(stores);
 
   // Generate invoice number
   const year = purchaseDate.getFullYear().toString().slice(-2);
@@ -198,7 +179,7 @@ async function createPurchase(
   // Use raw SQL for insertion to avoid TypeScript issues with the Drizzle ORM
   try {
     await db.transaction(async (tx) => {
-      // Insert purchase
+      // Insert purchase - keep store_id in the model but set it to null
       const insertPurchaseQuery = `
         INSERT INTO purchases (
           invoice_number, purchase_date, supplier_id, store_id, 
@@ -207,7 +188,7 @@ async function createPurchase(
         ) VALUES (
           '${invoiceNumber}', '${purchaseDate.toISOString()}', ${
         supplier.id
-      }, ${storeItem.id},
+      }, NULL,
           '${totalAmount}', '${discountAmount}', '${grandTotal}', '${status}',
           ${
             faker.helpers.maybe(
@@ -244,7 +225,7 @@ async function createPurchase(
 
         // Handle stock movements for received purchases
         if (status === "received") {
-          // Create stock movement
+          // Create stock movement - use akun_id but set store_id to null
           const insertMovementQuery = `
             INSERT INTO stock_movements (
               product_id, movement_type, quantity, note,
@@ -253,9 +234,9 @@ async function createPurchase(
               ${detail.productId}, 'in', ${
             detail.quantity
           }, 'Purchase received: ${invoiceNumber}',
-              ${supplier.id}, ${
-            storeItem.id
-          }, '${purchaseDate.toISOString()}', '${purchaseDate.toISOString()}'
+              ${
+                supplier.id
+              }, NULL, '${purchaseDate.toISOString()}', '${purchaseDate.toISOString()}'
             )
           `;
 
@@ -281,7 +262,9 @@ async function createPurchase(
   }
 }
 
-seedPurchases()
+// You can change the number of purchases to generate here
+// seedPurchases(monthlyHistoricalCount, currentMonthCount)
+seedPurchases(100, 50)
   .then(() => {
     console.log("Purchase seeding completed");
     process.exit();
