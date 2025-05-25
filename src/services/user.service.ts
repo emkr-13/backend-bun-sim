@@ -39,7 +39,32 @@ export class UserService {
 
     return updatedUser;
   }
-    async logout(userId: string) {
+
+  async createUser(email: string, password: string, fullname: string) {
+    // Validate input
+    if (!email || !password || !fullname) {
+      throw new Error("email, password and fullname are required");
+    }
+
+    // Check if user already exists
+    const existingUser = await this.userRepository.findUserByEmail(email);
+    if (existingUser) {
+      throw new Error("User with this email already exists");
+    }
+
+    // Create user
+    const user = await this.userRepository.createUser({
+      email,
+      password,
+      fullname,
+    });
+
+    logger.info("User created successfully: ", email);
+
+    return user;
+  }
+
+  async logout(userId: string) {
     if (!userId) {
       throw new Error("Unauthorized");
     }

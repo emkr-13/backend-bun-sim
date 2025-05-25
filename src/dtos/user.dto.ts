@@ -4,6 +4,7 @@ import {
   IsOptional,
   IsString,
   IsUUID,
+  MinLength,
 } from "class-validator";
 
 /**
@@ -51,7 +52,6 @@ export class UpdateUserDto {
  *           description: User last update date
  */
 export class UserProfileDto {
-
   @IsEmail()
   email!: string;
 
@@ -93,4 +93,46 @@ export class ChangePasswordDto {
   @IsNotEmpty()
   @IsString()
   newPassword!: string;
+}
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     CreateUserDto:
+ *       type: object
+ *       required:
+ *         - email
+ *         - password
+ *         - fullname
+ *       properties:
+ *         email:
+ *           type: string
+ *           format: email
+ *           description: User email address
+ *         password:
+ *           type: string
+ *           format: password
+ *           description: User password
+ *         fullname:
+ *           type: string
+ *           description: User's full name
+ *       example:
+ *         email: user@example.com
+ *         password: password123
+ *         fullname: John Doe
+ */
+export class CreateUserDto {
+  @IsNotEmpty()
+  @IsEmail({}, { message: "Please provide a valid email address" })
+  email!: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @MinLength(6, { message: "Password must be at least 6 characters long" })
+  password!: string;
+
+  @IsNotEmpty()
+  @IsString()
+  fullname!: string;
 }
