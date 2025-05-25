@@ -10,7 +10,13 @@ import { requestLogger, errorLogger } from "./middleware/loggerMiddleware";
 const app = express();
 const PORT = process.env.APP_PORT || 3000;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 app.use(express.json());
 
 // Apply request logger middleware
@@ -34,6 +40,7 @@ app.use(
     explorer: true,
     customCss: ".swagger-ui .topbar { display: none }",
     swaggerOptions: {
+      url: "/api-docs.json",
       docExpansion: "none",
       persistAuthorization: true,
     },
@@ -42,8 +49,13 @@ app.use(
 
 // Endpoint to serve Swagger JSON
 app.get("/api-docs.json", (req, res) => {
-  res.setHeader("Content-Type", "application/json");
-  res.send(JSON.stringify(swaggerSpec, null, 2));
+  try {
+    res.setHeader("Content-Type", "application/json");
+    res.send(JSON.stringify(swaggerSpec, null, 2));
+  } catch (error) {
+    logger.error(`Error serving swagger JSON: ${error}`);
+    res.status(500).json({ error: "Failed to generate API documentation" });
+  }
 });
 
 // API routes
