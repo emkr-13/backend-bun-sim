@@ -43,7 +43,7 @@ app.use(
 // Endpoint to serve Swagger JSON
 app.get("/api-docs.json", (req, res) => {
   res.setHeader("Content-Type", "application/json");
-  res.send(swaggerSpec);
+  res.send(JSON.stringify(swaggerSpec, null, 2));
 });
 
 // API routes
