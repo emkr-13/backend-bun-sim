@@ -16,46 +16,15 @@ const router = Router();
 
 /**
  * @swagger
- * /api/user/profile:
- *   get:
- *     summary: Get user profile
- *     tags: [User]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: User profile retrieved successfully
- *       401:
- *         description: Unauthorized
- *       500:
- *         description: Server error
+ * tags:
+ *   name: User
+ *   description: User management endpoints
  */
+
+// Get user profile
 router.get("/profile", authenticate, getUserProfile);
 
-/**
- * @swagger
- * /api/user/update:
- *   post:
- *     summary: Update user profile
- *     tags: [User]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/UpdateUserDto'
- *     responses:
- *       200:
- *         description: User profile updated successfully
- *       400:
- *         description: Invalid input data
- *       401:
- *         description: Unauthorized
- *       500:
- *         description: Server error
- */
+// Update user profile
 router.post(
   "/update",
   authenticate,
@@ -63,32 +32,7 @@ router.post(
   updateUserProfile
 );
 
-/**
- * @swagger
- * /api/user/create:
- *   post:
- *     summary: Create a new user (Admin only)
- *     tags: [User]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/CreateUserDto'
- *     responses:
- *       201:
- *         description: User created successfully
- *       400:
- *         description: Invalid input data
- *       401:
- *         description: Unauthorized
- *       409:
- *         description: User with this email already exists
- *       500:
- *         description: Server error
- */
+// Create a new user
 router.post("/create", authenticate, validateDto(CreateUserDto), createUser);
 
 export default router;

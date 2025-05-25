@@ -8,66 +8,18 @@ const router = Router();
 
 /**
  * @swagger
- * /api/auth/login:
- *   post:
- *     summary: Login to the system
- *     tags: [Authentication]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/LoginDto'
- *     responses:
- *       200:
- *         description: Login successful
- *       400:
- *         description: Invalid credentials
- *       500:
- *         description: Server error
+ * tags:
+ *   name: Authentication
+ *   description: Authentication endpoints
  */
+
+// Login to system
 router.post("/login", validateDto(LoginDto), login);
 
-/**
- * @swagger
- * /api/auth/refresh-token:
- *   post:
- *     summary: Refresh access token
- *     tags: [Authentication]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/RefreshTokenDto'
- *     responses:
- *       200:
- *         description: Token refreshed successfully
- *       400:
- *         description: Invalid refresh token
- *       401:
- *         description: Unauthorized
- *       500:
- *         description: Server error
- */
+// Refresh token
 router.post("/refresh-token", validateDto(RefreshTokenDto), refreshToken);
 
-/**
- * @swagger
- * /api/auth/logout:
- *   post:
- *     summary: Logout user
- *     tags: [Authentication]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Logout successful
- *       401:
- *         description: Unauthorized
- *       500:
- *         description: Server error
- */
+// Logout
 router.post("/logout", authenticate, logout);
 
 export default router;
