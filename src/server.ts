@@ -40,6 +40,12 @@ app.use(
   })
 );
 
+// Endpoint to serve Swagger JSON
+app.get("/api-docs.json", (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  res.send(swaggerSpec);
+});
+
 // API routes
 app.use("/api", routes);
 
@@ -53,6 +59,9 @@ if (process.env.NODE_ENV !== "production") {
     logger.info(`Access the application at http://localhost:${PORT}`);
     logger.info(
       `Access API documentation at http://localhost:${PORT}/api-docs`
+    );
+    logger.info(
+      `Access Swagger JSON at http://localhost:${PORT}/api-docs.json`
     );
   });
 }
