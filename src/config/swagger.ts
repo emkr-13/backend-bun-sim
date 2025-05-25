@@ -55,6 +55,15 @@ const options: swaggerJsdoc.Options = {
         name: "Quotation",
         description: "Quotation management endpoints",
       },
+      {
+        name: "Purchases",
+        description: "Purchase management endpoints",
+      },
+      {
+        name: "Reports",
+        description:
+          "Report generation endpoints with PDF export functionality",
+      },
     ],
     components: {
       securitySchemes: {
