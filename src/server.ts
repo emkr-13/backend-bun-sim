@@ -6,6 +6,7 @@ import logger from "./utils/logger"; // Import logger
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./config/swagger";
 import { requestLogger, errorLogger } from "./middleware/loggerMiddleware";
+import path from "path";
 
 const app = express();
 const PORT = process.env.APP_PORT || 3000;
@@ -18,6 +19,9 @@ app.use(
   })
 );
 app.use(express.json());
+
+// Serve static files from the public directory
+app.use(express.static(path.join(__dirname, "../public")));
 
 // Apply request logger middleware
 app.use(requestLogger);
@@ -32,6 +36,11 @@ app.get("/test", (req, res) => {
   });
 });
 
+// Custom Swagger UI route
+app.get("/api-docs-alt", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/swagger-ui.html"));
+});
+
 // Swagger documentation
 app.use(
   "/api-docs",
@@ -39,8 +48,8 @@ app.use(
   swaggerUi.setup(swaggerSpec, {
     explorer: true,
     customCss: ".swagger-ui .topbar { display: none }",
+    swaggerUrl: "/api-docs.json",
     swaggerOptions: {
-      url: "/api-docs.json",
       docExpansion: "none",
       persistAuthorization: true,
     },
