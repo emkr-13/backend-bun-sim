@@ -10,6 +10,7 @@ import {
   getAllQuotations,
   getQuotationDetail,
   updateQuotationStatus,
+  exportQuotationToPdf,
 } from "../controllers/quotationController";
 
 const router = Router();
@@ -29,6 +30,13 @@ router.get("/all", getAllQuotations);
 
 // Get quotation by ID
 router.post("/detail", validateDto(QuotationDetailDto), getQuotationDetail);
+
+// Export quotation to PDF
+router.post(
+  "/export-pdf",
+  validateDto(QuotationDetailDto),
+  exportQuotationToPdf
+);
 
 // Update quotation status
 router.post(
