@@ -10,6 +10,7 @@ import {
   getAllPurchases,
   getPurchaseDetail,
   updatePurchaseStatus,
+  exportPurchaseToPdf,
 } from "../controllers/purchaseController";
 
 const router = Router();
@@ -29,6 +30,9 @@ router.get("/all", getAllPurchases);
 
 // Get purchase by ID
 router.post("/detail", validateDto(PurchaseDetailDto), getPurchaseDetail);
+
+// Export purchase to PDF
+router.post("/export-pdf", validateDto(PurchaseDetailDto), exportPurchaseToPdf);
 
 // Update purchase status
 router.post(
