@@ -12,11 +12,6 @@ export interface IAuthRepository {
     refreshTokenExp: Date | null
   ): Promise<void>;
   verifyPassword(password: string, hashedPassword: string): Promise<boolean>;
-  createUser(data: {
-    email: string;
-    password: string;
-    fullname: string;
-  }): Promise<any>;
 }
 
 export class AuthRepository implements IAuthRepository {
@@ -52,25 +47,5 @@ export class AuthRepository implements IAuthRepository {
     hashedPassword: string
   ): Promise<boolean> {
     return bcrypt.compare(password, hashedPassword);
-  }
-
-  async createUser(data: {
-    email: string;
-    password: string;
-    fullname: string;
-  }): Promise<any> {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(data.password, salt);
-
-    const [newUser] = await db
-      .insert(users)
-      .values({
-        email: data.email,
-        password: hashedPassword,
-        fullname: data.fullname,
-      })
-      .returning();
-
-    return newUser;
   }
 }

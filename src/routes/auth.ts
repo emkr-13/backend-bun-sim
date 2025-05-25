@@ -1,12 +1,7 @@
 import { Router } from "express";
-import {
-  login,
-  register,
-  refreshToken,
-  logout,
-} from "../controllers/auth.controller";
+import { login, refreshToken, logout } from "../controllers/auth.controller";
 import { validateDto } from "../middleware/validationMiddleware";
-import { LoginDto, RefreshTokenDto, RegisterDto } from "../dtos/auth.dto";
+import { LoginDto, RefreshTokenDto } from "../dtos/auth.dto";
 import { authenticate } from "../middleware/authMiddleware";
 
 const router = Router();
@@ -32,30 +27,6 @@ const router = Router();
  *         description: Server error
  */
 router.post("/login", validateDto(LoginDto), login);
-
-/**
- * @swagger
- * /api/auth/register:
- *   post:
- *     summary: Register a new user
- *     tags: [Authentication]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/RegisterDto'
- *     responses:
- *       201:
- *         description: User registered successfully
- *       400:
- *         description: Invalid input data
- *       409:
- *         description: User already exists
- *       500:
- *         description: Server error
- */
-router.post("/register", validateDto(RegisterDto), register);
 
 /**
  * @swagger

@@ -56,30 +56,6 @@ export class AuthService {
     };
   }
 
-  async register(email: string, password: string, fullname: string) {
-    // Validate input
-    if (!email || !password || !fullname) {
-      throw new Error("email, password and fullname are required");
-    }
-
-    // Check if user already exists
-    const existingUser = await this.authRepository.findUserByEmail(email);
-    if (existingUser) {
-      throw new Error("User with this email already exists");
-    }
-
-    // Create user
-    const user = await this.authRepository.createUser({
-      email,
-      password,
-      fullname,
-    });
-
-    logger.info("User registered successfully: ", email);
-
-    return user;
-  }
-
   async refreshToken(refreshToken: string) {
     // Validate input
     if (!refreshToken) {

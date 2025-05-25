@@ -3,7 +3,7 @@ import { sendResponse } from "../utils/responseHelper";
 import logger, { logApiError } from "../utils/logger";
 import { AuthService } from "../services/auth.service";
 import { AuthRepository } from "../repositories/auth.repository";
-import { LoginDto, RefreshTokenDto, RegisterDto } from "../dtos/auth.dto";
+import { LoginDto, RefreshTokenDto } from "../dtos/auth.dto";
 
 const authRepository = new AuthRepository();
 const authService = new AuthService(authRepository);
@@ -60,48 +60,6 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   } catch (error: any) {
     const statusCode = error.message.includes("credentials")
       ? 401
-      : error.message.includes("required")
-      ? 400
-      : 500;
-    logApiError(statusCode, error.message, `${req.baseUrl}${req.path}`, error);
-    sendResponse(res, statusCode, error.message);
-  }
-};
-
-/**
- * @swagger
- * /api/auth/register:
- *   post:
- *     summary: Register a new user
- *     tags: [Authentication]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/RegisterDto'
- *     responses:
- *       201:
- *         description: User registered successfully
- *       400:
- *         description: Missing required fields or validation error
- *       409:
- *         description: Email already exists
- *       500:
- *         description: Server error
- */
-export const register = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { email, password, fullname } = req.body as RegisterDto;
-    await authService.register(email, password, fullname);
-
-    // Use enhanced response helper with action details
-    sendResponse(res, 201, "User registered successfully", null, {
-      action: "User registration",
-    });
-  } catch (error: any) {
-    const statusCode = error.message.includes("already exists")
-      ? 409
       : error.message.includes("required")
       ? 400
       : 500;
