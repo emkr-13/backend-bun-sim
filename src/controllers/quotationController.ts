@@ -55,7 +55,7 @@ export const createQuotation = async (
  * @swagger
  * /api/quotations/all:
  *   get:
- *     summary: Get all quotations
+ *     summary: Get all quotations with pagination
  *     tags: [Quotation]
  *     security:
  *       - bearerAuth: []
@@ -76,7 +76,7 @@ export const createQuotation = async (
  *         name: search
  *         schema:
  *           type: string
- *         description: Search term for quotation number, customer name, or store name
+ *         description: Search by quotation number or customer name
  *       - in: query
  *         name: status
  *         schema:
@@ -100,6 +100,45 @@ export const createQuotation = async (
  *     responses:
  *       200:
  *         description: List of quotations
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     data:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/QuotationResponseDto'
+ *                     pagination:
+ *                       type: object
+ *                       properties:
+ *                         total_data:
+ *                           type: number
+ *                         total_page:
+ *                           type: number
+ *                         total_display:
+ *                           type: number
+ *                         first_page:
+ *                           type: boolean
+ *                         last_page:
+ *                           type: boolean
+ *                         prev:
+ *                           type: number
+ *                         current:
+ *                           type: number
+ *                         next:
+ *                           type: number
+ *                         detail:
+ *                           type: array
+ *                           items:
+ *                             type: number
  *       500:
  *         description: Server error
  */
@@ -187,6 +226,17 @@ export const getAllQuotations = async (
  *     responses:
  *       200:
  *         description: Quotation details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   $ref: '#/components/schemas/QuotationDetailResponseDto'
  *       404:
  *         description: Quotation not found
  *       500:

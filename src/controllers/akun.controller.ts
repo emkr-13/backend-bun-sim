@@ -168,7 +168,14 @@ export const deleteAkun = async (
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/AkunResponseDto'
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   $ref: '#/components/schemas/AkunResponseDto'
  *       400:
  *         description: Invalid input data
  *       404:
@@ -248,21 +255,40 @@ export const detailAkun = async (
  *             schema:
  *               type: object
  *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
  *                 data:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/AkunResponseDto'
- *                 pagination:
  *                   type: object
  *                   properties:
- *                     total:
- *                       type: integer
- *                     page:
- *                       type: integer
- *                     limit:
- *                       type: integer
- *                     totalPages:
- *                       type: integer
+ *                     data:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/AkunResponseDto'
+ *                     pagination:
+ *                       type: object
+ *                       properties:
+ *                         total_data:
+ *                           type: number
+ *                         total_page:
+ *                           type: number
+ *                         total_display:
+ *                           type: number
+ *                         first_page:
+ *                           type: boolean
+ *                         last_page:
+ *                           type: boolean
+ *                         prev:
+ *                           type: number
+ *                         current:
+ *                           type: number
+ *                         next:
+ *                           type: number
+ *                         detail:
+ *                           type: array
+ *                           items:
+ *                             type: number
  *       500:
  *         description: Server error
  */

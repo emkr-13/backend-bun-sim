@@ -256,6 +256,27 @@ export const detailCategory = async (
  *                         $ref: '#/components/schemas/CategoryResponseDto'
  *                     pagination:
  *                       type: object
+ *                       properties:
+ *                         total_data:
+ *                           type: number
+ *                         total_page:
+ *                           type: number
+ *                         total_display:
+ *                           type: number
+ *                         first_page:
+ *                           type: boolean
+ *                         last_page:
+ *                           type: boolean
+ *                         prev:
+ *                           type: number
+ *                         current:
+ *                           type: number
+ *                         next:
+ *                           type: number
+ *                         detail:
+ *                           type: array
+ *                           items:
+ *                             type: number
  *       500:
  *         description: Server error
  */

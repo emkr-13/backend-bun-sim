@@ -52,7 +52,7 @@ export const createPurchase = async (
  * @swagger
  * /api/purchases/all:
  *   get:
- *     summary: Get all purchases
+ *     summary: Get all purchases with pagination
  *     tags: [Purchase]
  *     security:
  *       - bearerAuth: []
@@ -97,6 +97,45 @@ export const createPurchase = async (
  *     responses:
  *       200:
  *         description: List of purchases
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     data:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/PurchaseResponseDto'
+ *                     pagination:
+ *                       type: object
+ *                       properties:
+ *                         total_data:
+ *                           type: number
+ *                         total_page:
+ *                           type: number
+ *                         total_display:
+ *                           type: number
+ *                         first_page:
+ *                           type: boolean
+ *                         last_page:
+ *                           type: boolean
+ *                         prev:
+ *                           type: number
+ *                         current:
+ *                           type: number
+ *                         next:
+ *                           type: number
+ *                         detail:
+ *                           type: array
+ *                           items:
+ *                             type: number
  *       500:
  *         description: Server error
  */
@@ -184,6 +223,17 @@ export const getAllPurchases = async (
  *     responses:
  *       200:
  *         description: Purchase details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   $ref: '#/components/schemas/PurchaseDetailResponseDto'
  *       404:
  *         description: Purchase not found
  *       500:
