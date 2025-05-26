@@ -8,44 +8,6 @@ import { LoginDto, RefreshTokenDto } from "../dtos/auth.dto";
 const authRepository = new AuthRepository();
 const authService = new AuthService(authRepository);
 
-/**
- * @swagger
- * /api/auth/login:
- *   post:
- *     summary: Login to the system
- *     tags: [Authentication]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/LoginDto'
- *     responses:
- *       200:
- *         description: Login successful
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 data:
- *                   type: object
- *                   properties:
- *                     token:
- *                       type: string
- *                     refreshToken:
- *                       type: string
- *       400:
- *         description: Missing required fields
- *       401:
- *         description: Invalid credentials
- *       500:
- *         description: Server error
- */
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body as LoginDto;
@@ -66,44 +28,6 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-/**
- * @swagger
- * /api/auth/refresh-token:
- *   post:
- *     summary: Refresh access token
- *     tags: [Authentication]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/RefreshTokenDto'
- *     responses:
- *       200:
- *         description: Token refreshed successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 data:
- *                   type: object
- *                   properties:
- *                     token:
- *                       type: string
- *                     refreshToken:
- *                       type: string
- *       400:
- *         description: Invalid refresh token
- *       401:
- *         description: Refresh token expired
- *       500:
- *         description: Server error
- */
 export const refreshToken = async (
   req: Request,
   res: Response
@@ -126,33 +50,6 @@ export const refreshToken = async (
   }
 };
 
-/**
- * @swagger
- * /api/auth/logout:
- *   post:
- *     summary: Logout user
- *     tags: [Authentication]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Logged out successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 data:
- *                   type: null
- *       401:
- *         description: Unauthorized
- *       500:
- *         description: Server error
- */
 export const logout = async (req: Request, res: Response): Promise<void> => {
   try {
     // TypeScript doesn't recognize req.user because it's added by middleware

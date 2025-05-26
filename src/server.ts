@@ -7,6 +7,8 @@ import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./config/swagger";
 import { requestLogger, errorLogger } from "./middleware/loggerMiddleware";
 import path from "path";
+// Import all documentation to ensure it's included in the build
+import "./docs";
 
 const app = express();
 const PORT = process.env.APP_PORT || 3000;

@@ -86,9 +86,13 @@ const options: swaggerJsdoc.Options = {
   },
   apis: [
     "./src/**/*.ts", // Include all TypeScript files in src directory
+    "./src/docs/swagger/**/*.ts", // Include all Swagger documentation files specifically
   ],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
+
+// Import the Swagger documentation to ensure it is included in the build
+import "../docs/swagger";
 
 export default swaggerSpec;
