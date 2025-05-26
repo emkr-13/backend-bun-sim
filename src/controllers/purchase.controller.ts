@@ -8,39 +8,6 @@ import {
   UpdatePurchaseStatusDto,
 } from "../dtos/purchase.dto";
 
-/**
- * @swagger
- * /api/purchases/create:
- *   post:
- *     summary: Create a new purchase
- *     tags: [Purchase]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/CreatePurchaseDto'
- *     responses:
- *       201:
- *         description: Purchase created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 data:
- *                   $ref: '#/components/schemas/PurchaseResponseDto'
- *       400:
- *         description: Invalid input data
- *       500:
- *         description: Server error
- */
 export const createPurchase = async (
   req: Request,
   res: Response
@@ -59,97 +26,6 @@ export const createPurchase = async (
   }
 };
 
-/**
- * @swagger
- * /api/purchases/all:
- *   get:
- *     summary: Get all purchases with pagination
- *     tags: [Purchase]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: query
- *         name: page
- *         schema:
- *           type: integer
- *           default: 1
- *         description: Page number
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *           default: 10
- *         description: Number of items per page
- *       - in: query
- *         name: search
- *         schema:
- *           type: string
- *         description: Search term for invoice number, supplier name, or store name
- *       - in: query
- *         name: status
- *         schema:
- *           type: string
- *           enum: [draft, ordered, received, cancelled, paid]
- *         description: Filter by status
- *       - in: query
- *         name: sortBy
- *         schema:
- *           type: string
- *           enum: [invoiceNumber, purchaseDate, grandTotal, status, createdAt]
- *           default: createdAt
- *         description: Field to sort by
- *       - in: query
- *         name: sortOrder
- *         schema:
- *           type: string
- *           enum: [asc, desc]
- *           default: desc
- *         description: Sort order
- *     responses:
- *       200:
- *         description: List of purchases
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 data:
- *                   type: object
- *                   properties:
- *                     data:
- *                       type: array
- *                       items:
- *                         $ref: '#/components/schemas/PurchaseResponseDto'
- *                     pagination:
- *                       type: object
- *                       properties:
- *                         total_data:
- *                           type: number
- *                         total_page:
- *                           type: number
- *                         total_display:
- *                           type: number
- *                         first_page:
- *                           type: boolean
- *                         last_page:
- *                           type: boolean
- *                         prev:
- *                           type: number
- *                         current:
- *                           type: number
- *                         next:
- *                           type: number
- *                         detail:
- *                           type: array
- *                           items:
- *                             type: number
- *       500:
- *         description: Server error
- */
 export const getAllPurchases = async (
   req: Request,
   res: Response
@@ -217,39 +93,6 @@ export const getAllPurchases = async (
   }
 };
 
-/**
- * @swagger
- * /api/purchases/detail:
- *   post:
- *     summary: Get purchase by ID
- *     tags: [Purchase]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/PurchaseDetailDto'
- *     responses:
- *       200:
- *         description: Purchase details
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 data:
- *                   $ref: '#/components/schemas/PurchaseDetailResponseDto'
- *       404:
- *         description: Purchase not found
- *       500:
- *         description: Server error
- */
 export const getPurchaseDetail = async (
   req: Request,
   res: Response
@@ -273,52 +116,6 @@ export const getPurchaseDetail = async (
   }
 };
 
-/**
- * @swagger
- * /api/purchases/update-status:
- *   post:
- *     summary: Update purchase status
- *     tags: [Purchase]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/UpdatePurchaseStatusDto'
- *     responses:
- *       200:
- *         description: Purchase status updated
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 data:
- *                   oneOf:
- *                     - $ref: '#/components/schemas/PurchaseResponseDto'
- *                     - type: object
- *                       properties:
- *                         purchase:
- *                           $ref: '#/components/schemas/PurchaseResponseDto'
- *                         details:
- *                           type: array
- *                           items:
- *                             type: object
- *                         message:
- *                           type: string
- *       400:
- *         description: Invalid status or cannot update status due to business rules
- *       404:
- *         description: Purchase not found
- *       500:
- *         description: Server error
- */
 export const updatePurchaseStatus = async (
   req: Request,
   res: Response
@@ -378,34 +175,6 @@ export const updatePurchaseStatus = async (
   }
 };
 
-/**
- * @swagger
- * /api/purchases/export-pdf:
- *   post:
- *     summary: Export purchase to PDF
- *     tags: [Purchase]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/PurchaseDetailDto'
- *     responses:
- *       200:
- *         description: Purchase PDF
- *         content:
- *           application/pdf:
- *             schema:
- *               type: string
- *               format: binary
- *             description: PDF file containing the purchase details
- *       404:
- *         description: Purchase not found
- *       500:
- *         description: Server error
- */
 export const exportPurchaseToPdf = async (
   req: Request,
   res: Response
