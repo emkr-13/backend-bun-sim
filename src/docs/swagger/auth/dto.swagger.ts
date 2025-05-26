@@ -17,7 +17,7 @@
  *           format: password
  *           description: User password (min 6 characters)
  *       example:
- *         email: user@example.com
+ *         email: admin@mail.com
  *         password: password123
  *
  *     RefreshTokenDto:
