@@ -1,19 +1,19 @@
 import { Request, Response } from "express";
-import purchaseService from "../services/purchaseService";
-import { purchaseStatus } from "../models/purchase";
+import quotationService from "../services/quotation.service";
+import { quotationStatus } from "../models/quotation";
 import { sendResponse } from "../utils/responseHelper";
 import {
-  CreatePurchaseDto,
-  PurchaseDetailDto,
-  UpdatePurchaseStatusDto,
-} from "../dtos/purchase.dto";
+  CreateQuotationDto,
+  QuotationDetailDto,
+  UpdateQuotationStatusDto,
+} from "../dtos/quotation.dto";
 
 /**
  * @swagger
- * /api/purchases/create:
+ * /api/quotations/create:
  *   post:
- *     summary: Create a new purchase
- *     tags: [Purchase]
+ *     summary: Create a new quotation
+ *     tags: [Quotation]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -21,10 +21,10 @@ import {
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/CreatePurchaseDto'
+ *             $ref: '#/components/schemas/CreateQuotationDto'
  *     responses:
  *       201:
- *         description: Purchase created successfully
+ *         description: Quotation created successfully
  *         content:
  *           application/json:
  *             schema:
@@ -35,36 +35,39 @@ import {
  *                 message:
  *                   type: string
  *                 data:
- *                   $ref: '#/components/schemas/PurchaseResponseDto'
+ *                   $ref: '#/components/schemas/QuotationResponseDto'
  *       400:
  *         description: Invalid input data
  *       500:
  *         description: Server error
  */
-export const createPurchase = async (
+export const createQuotation = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const { details, ...purchaseData } = req.body as CreatePurchaseDto;
+    const { details, ...quotationData } = req.body as CreateQuotationDto;
 
-    const result = await purchaseService.createPurchase(purchaseData, details);
+    const result = await quotationService.createQuotation(
+      quotationData,
+      details
+    );
 
-    sendResponse(res, 201, "Purchase created successfully", result, {
-      action: "Create purchase",
+    sendResponse(res, 201, "Quotation created successfully", result, {
+      action: "Create quotation",
     });
   } catch (error) {
-    console.error("Error creating purchase:", error);
-    sendResponse(res, 500, "Failed to create purchase", error);
+    console.error("Error creating quotation:", error);
+    sendResponse(res, 500, "Failed to create quotation", error);
   }
 };
 
 /**
  * @swagger
- * /api/purchases/all:
+ * /api/quotations/all:
  *   get:
- *     summary: Get all purchases with pagination
- *     tags: [Purchase]
+ *     summary: Get all quotations with pagination
+ *     tags: [Quotation]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -84,18 +87,18 @@ export const createPurchase = async (
  *         name: search
  *         schema:
  *           type: string
- *         description: Search term for invoice number, supplier name, or store name
+ *         description: Search by quotation number or customer name
  *       - in: query
  *         name: status
  *         schema:
  *           type: string
- *           enum: [draft, ordered, received, cancelled, paid]
+ *           enum: [draft, sent, accepted, rejected, expired, converted]
  *         description: Filter by status
  *       - in: query
  *         name: sortBy
  *         schema:
  *           type: string
- *           enum: [invoiceNumber, purchaseDate, grandTotal, status, createdAt]
+ *           enum: [quotationNumber, quotationDate, grandTotal, status, createdAt]
  *           default: createdAt
  *         description: Field to sort by
  *       - in: query
@@ -107,7 +110,7 @@ export const createPurchase = async (
  *         description: Sort order
  *     responses:
  *       200:
- *         description: List of purchases
+ *         description: List of quotations
  *         content:
  *           application/json:
  *             schema:
@@ -123,7 +126,7 @@ export const createPurchase = async (
  *                     data:
  *                       type: array
  *                       items:
- *                         $ref: '#/components/schemas/PurchaseResponseDto'
+ *                         $ref: '#/components/schemas/QuotationResponseDto'
  *                     pagination:
  *                       type: object
  *                       properties:
@@ -150,7 +153,7 @@ export const createPurchase = async (
  *       500:
  *         description: Server error
  */
-export const getAllPurchases = async (
+export const getAllQuotations = async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -159,15 +162,15 @@ export const getAllPurchases = async (
     const limit = parseInt(req.query.limit as string) || 10;
     const search = req.query.search as string | undefined;
     const status = req.query.status as
-      | (typeof purchaseStatus.enumValues)[number]
+      | (typeof quotationStatus.enumValues)[number]
       | undefined;
     const sortBy = (req.query.sortBy as string) || "createdAt";
     const sortOrder = (req.query.sortOrder as "asc" | "desc") || "desc";
 
     // Validate sortBy field
     const validSortFields = [
-      "invoiceNumber",
-      "purchaseDate",
+      "quotationNumber",
+      "quotationDate",
       "grandTotal",
       "status",
       "createdAt",
@@ -188,18 +191,18 @@ export const getAllPurchases = async (
     }
 
     // Validate status if provided
-    if (status && !purchaseStatus.enumValues.includes(status)) {
+    if (status && !quotationStatus.enumValues.includes(status)) {
       sendResponse(
         res,
         400,
-        `Invalid status. Must be one of: ${purchaseStatus.enumValues.join(
+        `Invalid status. Must be one of: ${quotationStatus.enumValues.join(
           ", "
         )}`
       );
       return;
     }
 
-    const result = await purchaseService.getAllPurchases({
+    const result = await quotationService.getAllQuotations({
       page,
       limit,
       search,
@@ -208,21 +211,21 @@ export const getAllPurchases = async (
       sortOrder,
     });
 
-    sendResponse(res, 200, "Purchases retrieved successfully", result, {
-      action: "Fetch all purchases",
+    sendResponse(res, 200, "Quotations retrieved successfully", result, {
+      action: "Fetch all quotations",
     });
   } catch (error) {
-    console.error("Error fetching purchases:", error);
-    sendResponse(res, 500, "Failed to fetch purchases", error);
+    console.error("Error fetching quotations:", error);
+    sendResponse(res, 500, "Failed to fetch quotations", error);
   }
 };
 
 /**
  * @swagger
- * /api/purchases/detail:
+ * /api/quotations/detail:
  *   post:
- *     summary: Get purchase by ID
- *     tags: [Purchase]
+ *     summary: Get quotation by ID
+ *     tags: [Quotation]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -230,10 +233,10 @@ export const getAllPurchases = async (
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/PurchaseDetailDto'
+ *             $ref: '#/components/schemas/QuotationDetailDto'
  *     responses:
  *       200:
- *         description: Purchase details
+ *         description: Quotation details
  *         content:
  *           application/json:
  *             schema:
@@ -244,41 +247,41 @@ export const getAllPurchases = async (
  *                 message:
  *                   type: string
  *                 data:
- *                   $ref: '#/components/schemas/PurchaseDetailResponseDto'
+ *                   $ref: '#/components/schemas/QuotationDetailResponseDto'
  *       404:
- *         description: Purchase not found
+ *         description: Quotation not found
  *       500:
  *         description: Server error
  */
-export const getPurchaseDetail = async (
+export const getQuotationDetail = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const { id } = req.body as PurchaseDetailDto;
+    const { id } = req.body as QuotationDetailDto;
 
-    const purchase = await purchaseService.getPurchaseById(id);
+    const quotation = await quotationService.getQuotationById(id);
 
-    if (!purchase) {
-      sendResponse(res, 404, "Purchase not found");
+    if (!quotation) {
+      sendResponse(res, 404, "Quotation not found");
       return;
     }
 
-    sendResponse(res, 200, "Purchase retrieved successfully", purchase, {
-      action: "Fetch purchase details",
+    sendResponse(res, 200, "Quotation retrieved successfully", quotation, {
+      action: "Fetch quotation details",
     });
   } catch (error) {
-    console.error("Error fetching purchase:", error);
-    sendResponse(res, 500, "Failed to fetch purchase", error);
+    console.error("Error fetching quotation:", error);
+    sendResponse(res, 500, "Failed to fetch quotation", error);
   }
 };
 
 /**
  * @swagger
- * /api/purchases/update-status:
+ * /api/quotations/update-status:
  *   post:
- *     summary: Update purchase status
- *     tags: [Purchase]
+ *     summary: Update quotation status
+ *     tags: [Quotation]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -286,10 +289,10 @@ export const getPurchaseDetail = async (
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/UpdatePurchaseStatusDto'
+ *             $ref: '#/components/schemas/UpdateQuotationStatusDto'
  *     responses:
  *       200:
- *         description: Purchase status updated
+ *         description: Quotation status updated
  *         content:
  *           application/json:
  *             schema:
@@ -301,11 +304,11 @@ export const getPurchaseDetail = async (
  *                   type: string
  *                 data:
  *                   oneOf:
- *                     - $ref: '#/components/schemas/PurchaseResponseDto'
+ *                     - $ref: '#/components/schemas/QuotationResponseDto'
  *                     - type: object
  *                       properties:
- *                         purchase:
- *                           $ref: '#/components/schemas/PurchaseResponseDto'
+ *                         quotation:
+ *                           $ref: '#/components/schemas/QuotationResponseDto'
  *                         details:
  *                           type: array
  *                           items:
@@ -315,36 +318,36 @@ export const getPurchaseDetail = async (
  *       400:
  *         description: Invalid status or cannot update status due to business rules
  *       404:
- *         description: Purchase not found
+ *         description: Quotation not found
  *       500:
  *         description: Server error
  */
-export const updatePurchaseStatus = async (
+export const updateQuotationStatus = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const { id, status } = req.body as UpdatePurchaseStatusDto;
+    const { id, status } = req.body as UpdateQuotationStatusDto;
 
     try {
-      const result = await purchaseService.updatePurchaseStatus(id, status);
+      const result = await quotationService.updateQuotationStatus(id, status);
 
-      // For received purchases, include additional information in the response
-      if (status === "received") {
-        const updatedPurchase = await purchaseService.getPurchaseById(id);
+      // For accepted quotations, include additional information in the response
+      if (status === "accepted") {
+        const updatedQuotation = await quotationService.getQuotationById(id);
 
         sendResponse(
           res,
           200,
-          "Purchase received and stock updated successfully",
+          "Quotation accepted and stock updated successfully",
           {
-            purchase: result[0],
-            details: updatedPurchase?.details || [],
+            quotation: result[0],
+            details: updatedQuotation?.details || [],
             message:
-              "Stock has been automatically increased for all products in this purchase",
+              "Stock has been automatically reduced for all products in this quotation",
           },
           {
-            action: "Receive purchase and update stock",
+            action: "Accept quotation and update stock",
           }
         );
         return;
@@ -353,37 +356,45 @@ export const updatePurchaseStatus = async (
       sendResponse(
         res,
         200,
-        "Purchase status updated successfully",
+        "Quotation status updated successfully",
         result[0],
         {
-          action: "Update purchase status",
+          action: "Update quotation status",
         }
       );
     } catch (error: any) {
-      if (error.message.includes("already been received")) {
+      if (error.message.includes("already been accepted")) {
         sendResponse(res, 400, error.message);
         return;
       }
 
       if (error.message.includes("not found")) {
-        sendResponse(res, 404, "Purchase not found");
+        sendResponse(res, 404, "Quotation not found");
+        return;
+      }
+
+      if (error.message.includes("Insufficient stock")) {
+        sendResponse(res, 400, error.message, {
+          error: "INSUFFICIENT_STOCK",
+          details: error.message,
+        });
         return;
       }
 
       throw error; // Re-throw for the outer catch
     }
   } catch (error) {
-    console.error("Error updating purchase status:", error);
-    sendResponse(res, 500, "Failed to update purchase status", error);
+    console.error("Error updating quotation status:", error);
+    sendResponse(res, 500, "Failed to update quotation status", error);
   }
 };
 
 /**
  * @swagger
- * /api/purchases/export-pdf:
+ * /api/quotations/export-pdf:
  *   post:
- *     summary: Export purchase to PDF
- *     tags: [Purchase]
+ *     summary: Export quotation to PDF
+ *     tags: [Quotation]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -391,32 +402,32 @@ export const updatePurchaseStatus = async (
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/PurchaseDetailDto'
+ *             $ref: '#/components/schemas/QuotationDetailDto'
  *     responses:
  *       200:
- *         description: Purchase PDF
+ *         description: Quotation PDF
  *         content:
  *           application/pdf:
  *             schema:
  *               type: string
  *               format: binary
- *             description: PDF file containing the purchase details
+ *             description: PDF file containing the quotation details
  *       404:
- *         description: Purchase not found
+ *         description: Quotation not found
  *       500:
  *         description: Server error
  */
-export const exportPurchaseToPdf = async (
+export const exportQuotationToPdf = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const { id } = req.body as PurchaseDetailDto;
+    const { id } = req.body as QuotationDetailDto;
 
-    const purchase = await purchaseService.getPurchaseById(id);
+    const quotation = await quotationService.getQuotationById(id);
 
-    if (!purchase) {
-      sendResponse(res, 404, "Purchase not found");
+    if (!quotation) {
+      sendResponse(res, 404, "Quotation not found");
       return;
     }
 
@@ -427,35 +438,27 @@ export const exportPurchaseToPdf = async (
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
       "Content-Disposition",
-      `attachment; filename=purchase-${purchase.invoiceNumber}.pdf`
+      `attachment; filename=quotation-${quotation.quotationNumber}.pdf`
     );
 
     // Pipe the PDF to the response
     doc.pipe(res);
 
     // Add company header
-    doc.fontSize(20).text("PURCHASE ORDER", { align: "center" });
+    doc.fontSize(20).text("QUOTATION", { align: "center" });
     doc.moveDown();
 
-    // Add purchase details
-    doc.fontSize(12).text(`Invoice Number: ${purchase.invoiceNumber}`);
-    doc.text(`Date: ${new Date(purchase.purchaseDate).toLocaleDateString()}`);
-    doc.text(`Status: ${purchase.status.toUpperCase()}`);
-    if (purchase.paymentDueDate) {
-      doc.text(
-        `Payment Due: ${new Date(purchase.paymentDueDate).toLocaleDateString()}`
-      );
-    }
-    if (purchase.paymentTerm) {
-      doc.text(`Payment Term: ${purchase.paymentTerm}`);
-    }
+    // Add quotation details
+    doc.fontSize(12).text(`Quotation Number: ${quotation.quotationNumber}`);
+    doc.text(`Date: ${new Date(quotation.quotationDate).toLocaleDateString()}`);
+    doc.text(`Status: ${quotation.status.toUpperCase()}`);
     doc.moveDown();
 
-    // Add supplier and store info
-    doc.text(`Supplier: ${purchase.supplierName}`);
-    doc.text(`Store: ${purchase.storeName}`);
-    if (purchase.notes) {
-      doc.text(`Notes: ${purchase.notes}`);
+    // Add customer and store info
+    doc.text(`Customer: ${quotation.customerName}`);
+    doc.text(`Store: ${quotation.storeName}`);
+    if (quotation.notes) {
+      doc.text(`Notes: ${quotation.notes}`);
     }
     doc.moveDown();
 
@@ -484,7 +487,7 @@ export const exportPurchaseToPdf = async (
     doc.font("Helvetica");
     let rowTop = tableTop + 25;
 
-    purchase.details.forEach((item: any, index: number) => {
+    quotation.details.forEach((item: any, index: number) => {
       // Ensure we don't go off the page
       if (rowTop > 700) {
         doc.addPage();
@@ -540,9 +543,9 @@ export const exportPurchaseToPdf = async (
     // Add summary
     rowTop += 20;
     doc.font("Helvetica-Bold");
-    doc.text("Total Amount:", tableLeft + 300, rowTop);
+    doc.text("Subtotal:", tableLeft + 300, rowTop);
     doc.text(
-      `${Number(purchase.totalAmount).toLocaleString()}`,
+      `${Number(quotation.subtotal).toLocaleString()}`,
       tableLeft + 390,
       rowTop
     );
@@ -550,7 +553,7 @@ export const exportPurchaseToPdf = async (
     rowTop += 20;
     doc.text("Discount:", tableLeft + 300, rowTop);
     doc.text(
-      `${Number(purchase.discountAmount).toLocaleString()}`,
+      `${Number(quotation.discountAmount).toLocaleString()}`,
       tableLeft + 390,
       rowTop
     );
@@ -558,7 +561,7 @@ export const exportPurchaseToPdf = async (
     rowTop += 20;
     doc.text("Grand Total:", tableLeft + 300, rowTop);
     doc.text(
-      `${Number(purchase.grandTotal).toLocaleString()}`,
+      `${Number(quotation.grandTotal).toLocaleString()}`,
       tableLeft + 390,
       rowTop
     );
@@ -576,7 +579,7 @@ export const exportPurchaseToPdf = async (
     // Finalize the PDF
     doc.end();
   } catch (error) {
-    console.error("Error exporting purchase to PDF:", error);
-    sendResponse(res, 500, "Failed to export purchase to PDF", error);
+    console.error("Error exporting quotation to PDF:", error);
+    sendResponse(res, 500, "Failed to export quotation to PDF", error);
   }
 };

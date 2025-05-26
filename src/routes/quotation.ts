@@ -11,7 +11,7 @@ import {
   getQuotationDetail,
   updateQuotationStatus,
   exportQuotationToPdf,
-} from "../controllers/quotationController";
+} from "../controllers/quotation.controller";
 
 const router = Router();
 

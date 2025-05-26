@@ -11,7 +11,7 @@ import {
   getPurchaseDetail,
   updatePurchaseStatus,
   exportPurchaseToPdf,
-} from "../controllers/purchaseController";
+} from "../controllers/purchase.controller";
 
 const router = Router();
 
