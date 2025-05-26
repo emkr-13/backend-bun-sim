@@ -32,6 +32,17 @@ const productService = new ProductService(productRepository);
  *     responses:
  *       201:
  *         description: Product created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: null
  *       400:
  *         description: Invalid input data
  *       409:
@@ -87,6 +98,17 @@ export const createProduct = async (
  *     responses:
  *       200:
  *         description: Product updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: null
  *       400:
  *         description: Invalid input data
  *       404:
@@ -143,6 +165,17 @@ export const updateProduct = async (
  *     responses:
  *       200:
  *         description: Product deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: null
  *       400:
  *         description: Invalid input data
  *       404:
@@ -186,6 +219,17 @@ export const deleteProduct = async (
  *     responses:
  *       200:
  *         description: Product details retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   $ref: '#/components/schemas/ProductDetail'
  *       400:
  *         description: Invalid input data
  *       404:
@@ -259,6 +303,24 @@ export const getProductDetail = async (
  *     responses:
  *       200:
  *         description: Products retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     products:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/ProductItem'
+ *                     pagination:
+ *                       $ref: '#/components/schemas/Pagination'
  *       500:
  *         description: Server error
  */

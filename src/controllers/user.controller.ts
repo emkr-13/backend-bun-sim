@@ -87,7 +87,7 @@ export const getUserProfile = async (
  *                 message:
  *                   type: string
  *                 data:
- *                   $ref: '#/components/schemas/UserProfileDto'
+ *                   type: object
  *       400:
  *         description: Invalid input data
  *       401:
@@ -138,6 +138,17 @@ export const updateUserProfile = async (
  *     responses:
  *       201:
  *         description: User created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: null
  *       400:
  *         description: Invalid input data
  *       401:

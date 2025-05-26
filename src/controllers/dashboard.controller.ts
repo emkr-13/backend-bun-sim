@@ -25,7 +25,14 @@ const dashboardService = new DashboardService(dashboardRepository);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/SummaryGeneralDto'
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   $ref: '#/components/schemas/SummaryGeneralDto'
  *       500:
  *         description: Server error
  */
@@ -69,7 +76,14 @@ export const getSummaryGeneral = async (
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/SummarySpecificDto'
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   $ref: '#/components/schemas/SummarySpecificDto'
  *       400:
  *         description: Invalid filter
  *       500:
