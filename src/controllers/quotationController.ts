@@ -25,6 +25,17 @@ import {
  *     responses:
  *       201:
  *         description: Quotation created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   $ref: '#/components/schemas/QuotationResponseDto'
  *       400:
  *         description: Invalid input data
  *       500:
@@ -282,6 +293,28 @@ export const getQuotationDetail = async (
  *     responses:
  *       200:
  *         description: Quotation status updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   oneOf:
+ *                     - $ref: '#/components/schemas/QuotationResponseDto'
+ *                     - type: object
+ *                       properties:
+ *                         quotation:
+ *                           $ref: '#/components/schemas/QuotationResponseDto'
+ *                         details:
+ *                           type: array
+ *                           items:
+ *                             type: object
+ *                         message:
+ *                           type: string
  *       400:
  *         description: Invalid status or cannot update status due to business rules
  *       404:

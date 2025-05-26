@@ -30,6 +30,17 @@ const categoryService = new CategoryService(categoryRepository);
  *     responses:
  *       201:
  *         description: Category created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: null
  *       400:
  *         description: Invalid input data
  *       409:
@@ -73,6 +84,17 @@ export const createCategory = async (
  *     responses:
  *       200:
  *         description: Category updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: null
  *       400:
  *         description: Invalid input data
  *       404:
@@ -116,6 +138,17 @@ export const updateCategory = async (
  *     responses:
  *       200:
  *         description: Category deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: null
  *       400:
  *         description: Invalid input data
  *       404:

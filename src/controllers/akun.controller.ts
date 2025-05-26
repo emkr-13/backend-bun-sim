@@ -31,6 +31,17 @@ const akunService = new AkunService(akunRepository);
  *     responses:
  *       201:
  *         description: Account created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: null
  *       400:
  *         description: Invalid input data
  *       409:
@@ -76,6 +87,17 @@ export const createAkun = async (
  *     responses:
  *       200:
  *         description: Account updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: null
  *       400:
  *         description: Invalid input data
  *       404:
@@ -122,6 +144,17 @@ export const updateAkun = async (
  *     responses:
  *       200:
  *         description: Account deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: null
  *       400:
  *         description: Invalid input data
  *       404:

@@ -30,6 +30,17 @@ const storeService = new StoreService(storeRepository);
  *     responses:
  *       201:
  *         description: Store created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: null
  *       400:
  *         description: Invalid input data
  *       409:
@@ -93,6 +104,17 @@ export const createStore = async (
  *     responses:
  *       200:
  *         description: Store updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: null
  *       400:
  *         description: Invalid input data
  *       404:
@@ -162,6 +184,17 @@ export const updateStore = async (
  *     responses:
  *       200:
  *         description: Store deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: null
  *       400:
  *         description: Invalid input data
  *       404:

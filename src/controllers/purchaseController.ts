@@ -25,6 +25,17 @@ import {
  *     responses:
  *       201:
  *         description: Purchase created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   $ref: '#/components/schemas/PurchaseResponseDto'
  *       400:
  *         description: Invalid input data
  *       500:
@@ -279,6 +290,28 @@ export const getPurchaseDetail = async (
  *     responses:
  *       200:
  *         description: Purchase status updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   oneOf:
+ *                     - $ref: '#/components/schemas/PurchaseResponseDto'
+ *                     - type: object
+ *                       properties:
+ *                         purchase:
+ *                           $ref: '#/components/schemas/PurchaseResponseDto'
+ *                         details:
+ *                           type: array
+ *                           items:
+ *                             type: object
+ *                         message:
+ *                           type: string
  *       400:
  *         description: Invalid status or cannot update status due to business rules
  *       404:
