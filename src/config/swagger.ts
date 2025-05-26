@@ -64,6 +64,10 @@ const options: swaggerJsdoc.Options = {
         description:
           "Report generation endpoints with PDF export functionality",
       },
+      {
+        name: "Dashboard",
+        description: "Dashboard endpoints for summary data",
+      },
     ],
     components: {
       securitySchemes: {
