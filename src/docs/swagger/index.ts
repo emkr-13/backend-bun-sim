@@ -10,9 +10,13 @@ import "./dashboard";
 // Import user documentation
 import "./user";
 
-// Import other module documentation
+// Import categories documentation
 import "./categories";
+
+// Import store documentation
 import "./store";
+
+// Import other module documentation
 import "./product";
 import "./akun";
 import "./purchase";

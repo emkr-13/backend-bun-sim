@@ -15,41 +15,6 @@ import { exportToPdf, exportToExcel } from "../utils/exportUtils";
 const productRepository = new ProductRepository();
 const productService = new ProductService(productRepository);
 
-/**
- * @swagger
- * /api/products/create:
- *   post:
- *     summary: Create a new product
- *     tags: [Products]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/CreateProductDto'
- *     responses:
- *       201:
- *         description: Product created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 data:
- *                   type: null
- *       400:
- *         description: Invalid input data
- *       409:
- *         description: Product already exists
- *       500:
- *         description: Server error
- */
 export const createProduct = async (
   req: Request,
   res: Response
@@ -81,41 +46,6 @@ export const createProduct = async (
   }
 };
 
-/**
- * @swagger
- * /api/products/update:
- *   post:
- *     summary: Update an existing product
- *     tags: [Products]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/UpdateProductDto'
- *     responses:
- *       200:
- *         description: Product updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 data:
- *                   type: null
- *       400:
- *         description: Invalid input data
- *       404:
- *         description: Product not found
- *       500:
- *         description: Server error
- */
 export const updateProduct = async (
   req: Request,
   res: Response
@@ -148,41 +78,6 @@ export const updateProduct = async (
   }
 };
 
-/**
- * @swagger
- * /api/products/delete:
- *   post:
- *     summary: Delete a product
- *     tags: [Products]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/DeleteProductDto'
- *     responses:
- *       200:
- *         description: Product deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 data:
- *                   type: null
- *       400:
- *         description: Invalid input data
- *       404:
- *         description: Product not found
- *       500:
- *         description: Server error
- */
 export const deleteProduct = async (
   req: Request,
   res: Response
@@ -202,41 +97,6 @@ export const deleteProduct = async (
   }
 };
 
-/**
- * @swagger
- * /api/products/detail:
- *   post:
- *     summary: Get product details
- *     tags: [Products]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/ProductDetailDto'
- *     responses:
- *       200:
- *         description: Product details retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 data:
- *                   $ref: '#/components/schemas/ProductDetail'
- *       400:
- *         description: Invalid input data
- *       404:
- *         description: Product not found
- *       500:
- *         description: Server error
- */
 export const getProductDetail = async (
   req: Request,
   res: Response
@@ -256,95 +116,6 @@ export const getProductDetail = async (
   }
 };
 
-/**
- * @swagger
- * /api/products/all:
- *   get:
- *     summary: Get list of products
- *     tags: [Products]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: query
- *         name: page
- *         schema:
- *           type: integer
- *           default: 1
- *         description: Page number
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *           default: 10
- *         description: Number of items per page
- *       - in: query
- *         name: search
- *         schema:
- *           type: string
- *         description: Search term
- *       - in: query
- *         name: categoryId
- *         schema:
- *           type: integer
- *         description: Filter by category ID
- *       - in: query
- *         name: sortBy
- *         schema:
- *           type: string
- *           default: createdAt
- *         description: Field to sort by
- *       - in: query
- *         name: sortOrder
- *         schema:
- *           type: string
- *           enum: [asc, desc]
- *           default: desc
- *         description: Sort order
- *     responses:
- *       200:
- *         description: Products retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 data:
- *                   type: object
- *                   properties:
- *                     products:
- *                       type: array
- *                       items:
- *                         $ref: '#/components/schemas/ProductItem'
- *                     pagination:
- *                       type: object
- *                       properties:
- *                         total_data:
- *                           type: number
- *                         total_page:
- *                           type: number
- *                         total_display:
- *                           type: number
- *                         first_page:
- *                           type: boolean
- *                         last_page:
- *                           type: boolean
- *                         prev:
- *                           type: number
- *                         current:
- *                           type: number
- *                         next:
- *                           type: number
- *                         detail:
- *                           type: array
- *                           items:
- *                             type: number
- *       500:
- *         description: Server error
- */
 export const listProducts = async (
   req: Request,
   res: Response
@@ -376,31 +147,6 @@ export const listProducts = async (
   }
 };
 
-/**
- * @swagger
- * /api/products/export/pdf:
- *   get:
- *     summary: Export products list to PDF
- *     tags: [Products]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: query
- *         name: title
- *         schema:
- *           type: string
- *         description: Custom title for the report
- *     responses:
- *       200:
- *         description: PDF file
- *         content:
- *           application/pdf:
- *             schema:
- *               type: string
- *               format: binary
- *       500:
- *         description: Server error
- */
 export const exportProductsToPdf = async (
   req: Request,
   res: Response
@@ -420,31 +166,6 @@ export const exportProductsToPdf = async (
   }
 };
 
-/**
- * @swagger
- * /api/products/export/excel:
- *   get:
- *     summary: Export products list to Excel
- *     tags: [Products]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: query
- *         name: title
- *         schema:
- *           type: string
- *         description: Custom title for the report
- *     responses:
- *       200:
- *         description: Excel file
- *         content:
- *           application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
- *             schema:
- *               type: string
- *               format: binary
- *       500:
- *         description: Server error
- */
 export const exportProductsToExcel = async (
   req: Request,
   res: Response
