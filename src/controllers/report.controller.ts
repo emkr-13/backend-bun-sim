@@ -6,33 +6,6 @@ import logger from "../utils/logger";
 
 const reportService = new ReportService();
 
-/**
- * @swagger
- * /api/reports/quotations/pdf:
- *   post:
- *     summary: Generate quotations report as PDF
- *     tags: [Reports]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/ReportFilterDto'
- *     responses:
- *       200:
- *         description: PDF report generated successfully
- *         content:
- *           application/pdf:
- *             schema:
- *               type: string
- *               format: binary
- *       400:
- *         description: Invalid input data
- *       500:
- *         description: Server error
- */
 export const generateQuotationsPdfReport = async (
   req: Request,
   res: Response
@@ -112,33 +85,6 @@ export const generateQuotationsPdfReport = async (
   }
 };
 
-/**
- * @swagger
- * /api/reports/purchases/pdf:
- *   post:
- *     summary: Generate purchases report as PDF
- *     tags: [Reports]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/ReportFilterDto'
- *     responses:
- *       200:
- *         description: PDF report generated successfully
- *         content:
- *           application/pdf:
- *             schema:
- *               type: string
- *               format: binary
- *       400:
- *         description: Invalid input data
- *       500:
- *         description: Server error
- */
 export const generatePurchasesPdfReport = async (
   req: Request,
   res: Response
@@ -218,33 +164,6 @@ export const generatePurchasesPdfReport = async (
   }
 };
 
-/**
- * @swagger
- * /api/reports/combined/pdf:
- *   post:
- *     summary: Generate combined financial report as PDF
- *     tags: [Reports]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/ReportFilterDto'
- *     responses:
- *       200:
- *         description: PDF report generated successfully
- *         content:
- *           application/pdf:
- *             schema:
- *               type: string
- *               format: binary
- *       400:
- *         description: Invalid input data
- *       500:
- *         description: Server error
- */
 export const generateCombinedPdfReport = async (
   req: Request,
   res: Response
