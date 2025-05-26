@@ -22,5 +22,6 @@ import "./akun";
 import "./purchase";
 import "./quotation";
 import "./report";
+import "./stockMovements";
 
 // No need to export anything as swagger-jsdoc will scan these files directly

@@ -9,6 +9,7 @@ import quotationRoutes from "./quotation";
 import purchaseRoutes from "./purchase";
 import reportsRoutes from "./reports";
 import dashboardRoutes from "./dashboard";
+import stockMovementsRoutes from "./stockMovements";
 import { authenticate } from "../middleware/authMiddleware";
 
 const router = Router();
@@ -27,6 +28,7 @@ protectedRouter.use("/quotations", quotationRoutes);
 protectedRouter.use("/purchases", purchaseRoutes);
 protectedRouter.use("/reports", reportsRoutes);
 protectedRouter.use("/dashboard", dashboardRoutes);
+protectedRouter.use("/stock-movements", stockMovementsRoutes);
 
 // Apply authentication middleware to all protected routes
 router.use(authenticate, protectedRouter);

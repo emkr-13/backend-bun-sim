@@ -27,13 +27,17 @@ const options: swaggerJsdoc.Options = {
     ],
     tags: [
       {
+        name: "Authentication",
+        description:
+          "Authentication endpoints for login, register, and token management",
+      },
+      {
         name: "User",
         description: "User management endpoints",
       },
       {
-        name: "Authentication",
-        description:
-          "Authentication endpoints for login, register, and token management",
+        name: "Dashboard",
+        description: "Dashboard endpoints for summary data",
       },
       {
         name: "Akun",
@@ -65,8 +69,8 @@ const options: swaggerJsdoc.Options = {
           "Report generation endpoints with PDF export functionality",
       },
       {
-        name: "Dashboard",
-        description: "Dashboard endpoints for summary data",
+        name: "StockMovements",
+        description: "Stock movement tracking and management endpoints",
       },
     ],
     components: {
