@@ -12,35 +12,6 @@ import {
 const userRepository = new UserRepository();
 const userService = new UserService(userRepository);
 
-/**
- * @swagger
- * /api/user/profile:
- *   get:
- *     summary: Get user profile
- *     tags: [User]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: User profile retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 data:
- *                   $ref: '#/components/schemas/UserProfileDto'
- *       401:
- *         description: Unauthorized
- *       404:
- *         description: User not found
- *       500:
- *         description: Server error
- */
 export const getUserProfile = async (
   req: Request,
   res: Response
@@ -60,43 +31,6 @@ export const getUserProfile = async (
   }
 };
 
-/**
- * @swagger
- * /api/user/update:
- *   post:
- *     summary: Update user profile
- *     tags: [User]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/UpdateUserDto'
- *     responses:
- *       200:
- *         description: User profile updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 data:
- *                   type: object
- *       400:
- *         description: Invalid input data
- *       401:
- *         description: Unauthorized
- *       404:
- *         description: User not found
- *       500:
- *         description: Server error
- */
 export const updateUserProfile = async (
   req: Request,
   res: Response
@@ -121,43 +55,6 @@ export const updateUserProfile = async (
   }
 };
 
-/**
- * @swagger
- * /api/user/create:
- *   post:
- *     summary: Create a new user (Admin only)
- *     tags: [User]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/CreateUserDto'
- *     responses:
- *       201:
- *         description: User created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 data:
- *                   type: null
- *       400:
- *         description: Invalid input data
- *       401:
- *         description: Unauthorized
- *       409:
- *         description: User with this email already exists
- *       500:
- *         description: Server error
- */
 export const createUser = async (
   req: Request,
   res: Response

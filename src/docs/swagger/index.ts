@@ -4,9 +4,19 @@
 // Import auth documentation
 import "./auth";
 
-// Add other module documentation imports as needed
-// import './users';
-// import './products';
-// etc.
+// Import dashboard documentation
+import "./dashboard";
+
+// Import user documentation
+import "./user";
+
+// Import other module documentation
+import "./categories";
+import "./store";
+import "./product";
+import "./akun";
+import "./purchase";
+import "./quotation";
+import "./report";
 
 // No need to export anything as swagger-jsdoc will scan these files directly
