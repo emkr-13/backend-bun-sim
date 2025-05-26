@@ -14,41 +14,6 @@ import {
 const akunRepository = new AkunRepository();
 const akunService = new AkunService(akunRepository);
 
-/**
- * @swagger
- * /api/akun/create:
- *   post:
- *     summary: Create a new account
- *     tags: [Akun]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/CreateAkunDto'
- *     responses:
- *       201:
- *         description: Account created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 data:
- *                   type: null
- *       400:
- *         description: Invalid input data
- *       409:
- *         description: Account already exists
- *       500:
- *         description: Server error
- */
 export const createAkun = async (
   req: Request,
   res: Response
@@ -70,41 +35,6 @@ export const createAkun = async (
   }
 };
 
-/**
- * @swagger
- * /api/akun/update:
- *   post:
- *     summary: Update an existing account
- *     tags: [Akun]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/UpdateAkunDto'
- *     responses:
- *       200:
- *         description: Account updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 data:
- *                   type: null
- *       400:
- *         description: Invalid input data
- *       404:
- *         description: Account not found
- *       500:
- *         description: Server error
- */
 export const updateAkun = async (
   req: Request,
   res: Response
@@ -127,41 +57,6 @@ export const updateAkun = async (
   }
 };
 
-/**
- * @swagger
- * /api/akun/delete:
- *   post:
- *     summary: Delete an account
- *     tags: [Akun]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/DeleteAkunDto'
- *     responses:
- *       200:
- *         description: Account deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 data:
- *                   type: null
- *       400:
- *         description: Invalid input data
- *       404:
- *         description: Account not found
- *       500:
- *         description: Server error
- */
 export const deleteAkun = async (
   req: Request,
   res: Response
@@ -181,41 +76,6 @@ export const deleteAkun = async (
   }
 };
 
-/**
- * @swagger
- * /api/akun/detail:
- *   post:
- *     summary: Get account details
- *     tags: [Akun]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/AkunDetailDto'
- *     responses:
- *       200:
- *         description: Account found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 data:
- *                   $ref: '#/components/schemas/AkunResponseDto'
- *       400:
- *         description: Invalid input data
- *       404:
- *         description: Account not found
- *       500:
- *         description: Server error
- */
 export const detailAkun = async (
   req: Request,
   res: Response
@@ -235,96 +95,6 @@ export const detailAkun = async (
   }
 };
 
-/**
- * @swagger
- * /api/akun/all:
- *   get:
- *     summary: Get list of accounts
- *     tags: [Akun]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: query
- *         name: page
- *         schema:
- *           type: integer
- *           default: 1
- *         description: Page number
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *           default: 10
- *         description: Number of items per page
- *       - in: query
- *         name: search
- *         schema:
- *           type: string
- *         description: Search term for account name or email
- *       - in: query
- *         name: type
- *         schema:
- *           type: string
- *           enum: [customer, supplier]
- *         description: Filter by account type
- *       - in: query
- *         name: sortBy
- *         schema:
- *           type: string
- *           default: createdAt
- *         description: Field to sort by
- *       - in: query
- *         name: sortOrder
- *         schema:
- *           type: string
- *           enum: [asc, desc]
- *           default: desc
- *         description: Sort order
- *     responses:
- *       200:
- *         description: List of accounts retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *                 data:
- *                   type: object
- *                   properties:
- *                     data:
- *                       type: array
- *                       items:
- *                         $ref: '#/components/schemas/AkunResponseDto'
- *                     pagination:
- *                       type: object
- *                       properties:
- *                         total_data:
- *                           type: number
- *                         total_page:
- *                           type: number
- *                         total_display:
- *                           type: number
- *                         first_page:
- *                           type: boolean
- *                         last_page:
- *                           type: boolean
- *                         prev:
- *                           type: number
- *                         current:
- *                           type: number
- *                         next:
- *                           type: number
- *                         detail:
- *                           type: array
- *                           items:
- *                             type: number
- *       500:
- *         description: Server error
- */
 export const listAkuns = async (req: Request, res: Response): Promise<void> => {
   try {
     const page = parseInt(req.query.page as string) || 1;
