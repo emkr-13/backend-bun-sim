@@ -35,12 +35,10 @@ const authService = new AuthService(authRepository);
  *                 data:
  *                   type: object
  *                   properties:
- *                     accessToken:
+ *                     token:
  *                       type: string
  *                     refreshToken:
  *                       type: string
- *                     user:
- *                       type: object
  *       400:
  *         description: Missing required fields
  *       401:
@@ -83,6 +81,22 @@ export const login = async (req: Request, res: Response): Promise<void> => {
  *     responses:
  *       200:
  *         description: Token refreshed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     token:
+ *                       type: string
+ *                     refreshToken:
+ *                       type: string
  *       400:
  *         description: Invalid refresh token
  *       401:
@@ -123,6 +137,17 @@ export const refreshToken = async (
  *     responses:
  *       200:
  *         description: Logged out successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: null
  *       401:
  *         description: Unauthorized
  *       500:
