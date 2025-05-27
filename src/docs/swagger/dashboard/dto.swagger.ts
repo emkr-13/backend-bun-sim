@@ -5,53 +5,58 @@
  *     SummaryGeneralDto:
  *       type: object
  *       properties:
- *         totalUsers:
+ *         total_customers:
  *           type: number
- *           description: Total number of users
- *         totalProducts:
+ *           description: Total number of customers
+ *         total_suppliers:
  *           type: number
- *           description: Total number of products
- *         totalCategories:
- *           type: number
- *           description: Total number of categories
- *         totalStores:
+ *           description: Total number of suppliers
+ *         total_stores:
  *           type: number
  *           description: Total number of stores
+ *         total_products:
+ *           type: number
+ *           description: Total number of products
  *       example:
- *         totalUsers: 100
- *         totalProducts: 250
- *         totalCategories: 30
- *         totalStores: 5
+ *         total_customers: 100
+ *         total_suppliers: 50
+ *         total_stores: 5
+ *         total_products: 250
+ *
+ *     TimeFilterType:
+ *       type: string
+ *       enum: [today, last_week, last_two_weeks, this_month]
+ *       description: Time filter for summary data
+ *
+ *     SummarySpecificFilterDto:
+ *       type: object
+ *       properties:
+ *         time_filter:
+ *           $ref: '#/components/schemas/TimeFilterType'
+ *       example:
+ *         time_filter: last_week
  *
  *     SummarySpecificDto:
  *       type: object
  *       properties:
- *         salesTotal:
+ *         total_quotations:
  *           type: number
- *           description: Total sales amount
- *         purchasesTotal:
+ *           description: Total quotations in the time period
+ *         total_purchases:
  *           type: number
- *           description: Total purchases amount
- *         transactionsCount:
+ *           description: Total purchases in the time period
+ *         total_stock_movements_in:
  *           type: number
- *           description: Total number of transactions
- *         recentTransactions:
- *           type: array
- *           items:
- *             type: object
- *             properties:
- *               id:
- *                 type: string
- *               type:
- *                 type: string
- *               amount:
- *                 type: number
- *               date:
- *                 type: string
- *                 format: date-time
+ *           description: Total stock movements (in) in the time period
+ *         total_stock_movements_out:
+ *           type: number
+ *           description: Total stock movements (out) in the time period
+ *         time_filter:
+ *           $ref: '#/components/schemas/TimeFilterType'
  *       example:
- *         salesTotal: 150000
- *         purchasesTotal: 120000
- *         transactionsCount: 25
- *         recentTransactions: []
+ *         total_quotations: 25
+ *         total_purchases: 18
+ *         total_stock_movements_in: 42
+ *         total_stock_movements_out: 36
+ *         time_filter: last_week
  */
