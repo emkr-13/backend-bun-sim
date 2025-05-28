@@ -2,41 +2,6 @@
  * @swagger
  * components:
  *   schemas:
- *     CreateStockMovementDto:
- *       type: object
- *       required:
- *         - productId
- *         - movementType
- *         - quantity
- *       properties:
- *         productId:
- *           type: integer
- *           description: The product ID
- *         movementType:
- *           type: string
- *           enum: [in, out]
- *           description: Type of movement (in or out)
- *         quantity:
- *           type: integer
- *           minimum: 1
- *           description: Quantity of products to move
- *         note:
- *           type: string
- *           description: Additional note for the movement
- *         akunId:
- *           type: integer
- *           description: Account ID related to this movement (optional)
- *         storeId:
- *           type: integer
- *           description: Store ID related to this movement (optional)
- *       example:
- *         productId: 1
- *         movementType: "in"
- *         quantity: 10
- *         note: "Received new stock from supplier"
- *         akunId: 2
- *         storeId: 1
- *
  *     StockMovementDetailDto:
  *       type: object
  *       required:
