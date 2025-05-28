@@ -118,39 +118,20 @@
  *           type: array
  *           items:
  *             $ref: '#/components/schemas/StockMovementResponseDto'
- *         total:
- *           type: integer
- *           description: Total number of records
- *         page:
- *           type: integer
- *           description: Current page
- *         limit:
- *           type: integer
- *           description: Number of records per page
- *         totalPages:
- *           type: integer
- *           description: Total number of pages
  *       example:
- *         data: [
- *           {
- *             id: 1,
- *             productId: 1,
- *             productName: "Laptop XYZ",
- *             productSku: "SKU-123",
- *             productSatuan: "pcs",
- *             movementType: "in",
- *             quantity: 10,
- *             note: "Received new stock from supplier",
- *             akunId: 2,
- *             akunName: "Purchases",
- *             storeId: 1,
- *             storeName: "Main Store",
- *             createdAt: "2023-08-15T08:00:00.000Z",
+ *         data:
+ *           - id: 1
+ *             productId: 1
+ *             productName: "Laptop XYZ"
+ *             productSku: "SKU-123"
+ *             productSatuan: "pcs"
+ *             movementType: "in"
+ *             quantity: 10
+ *             note: "Received new stock from supplier"
+ *             akunId: 2
+ *             akunName: "Purchases"
+ *             storeId: 1
+ *             storeName: "Main Store"
+ *             createdAt: "2023-08-15T08:00:00.000Z"
  *             updatedAt: "2023-08-15T08:00:00.000Z"
- *           }
- *         ],
- *         total: 50,
- *         page: 1,
- *         limit: 10,
- *         totalPages: 5
  */

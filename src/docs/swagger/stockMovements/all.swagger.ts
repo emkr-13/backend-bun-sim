@@ -82,6 +82,10 @@
  *                       type: array
  *                       items:
  *                         type: number
+ *       400:
+ *         description: Bad request
+ *       401:
+ *         description: Unauthorized
  *       500:
  *         description: Server error
  */

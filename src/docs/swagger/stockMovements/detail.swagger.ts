@@ -27,6 +27,10 @@
  *                   type: string
  *                 data:
  *                   $ref: '#/components/schemas/StockMovementResponseDto'
+ *       400:
+ *         description: Bad request or validation error
+ *       401:
+ *         description: Unauthorized
  *       404:
  *         description: Stock movement not found
  *       500:
