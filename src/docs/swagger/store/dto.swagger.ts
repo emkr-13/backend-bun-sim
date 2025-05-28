@@ -6,7 +6,6 @@
  *       type: object
  *       required:
  *         - name
- *         - location
  *       properties:
  *         name:
  *           type: string
@@ -47,12 +46,10 @@
  *       type: object
  *       required:
  *         - id
- *         - name
- *         - location
  *       properties:
  *         id:
- *           type: string
- *           format: uuid
+ *           type: integer
+ *           minimum: 1
  *           description: Store ID
  *         name:
  *           type: string
@@ -80,7 +77,7 @@
  *           type: string
  *           description: Store physical address
  *       example:
- *         id: 123e4567-e89b-12d3-a456-426614174000
+ *         id: 1
  *         name: Updated Store
  *         description: Updated description
  *         location: Uptown
@@ -96,11 +93,11 @@
  *         - id
  *       properties:
  *         id:
- *           type: string
- *           format: uuid
+ *           type: integer
+ *           minimum: 1
  *           description: Store ID to delete
  *       example:
- *         id: 123e4567-e89b-12d3-a456-426614174000
+ *         id: 1
  *
  *     StoreDetailDto:
  *       type: object
@@ -108,18 +105,17 @@
  *         - id
  *       properties:
  *         id:
- *           type: string
- *           format: uuid
+ *           type: integer
+ *           minimum: 1
  *           description: Store ID to retrieve details
  *       example:
- *         id: 123e4567-e89b-12d3-a456-426614174000
+ *         id: 1
  *
  *     StoreResponseDto:
  *       type: object
  *       properties:
  *         id:
- *           type: string
- *           format: uuid
+ *           type: integer
  *           description: Store ID
  *         name:
  *           type: string
@@ -155,7 +151,7 @@
  *           format: date-time
  *           description: Last update date
  *       example:
- *         id: 123e4567-e89b-12d3-a456-426614174000
+ *         id: 1
  *         name: Main Store
  *         description: Our main retail location
  *         location: Downtown

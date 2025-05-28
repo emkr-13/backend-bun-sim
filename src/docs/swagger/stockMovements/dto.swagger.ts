@@ -9,9 +9,43 @@
  *       properties:
  *         id:
  *           type: integer
+ *           minimum: 1
  *           description: Stock movement ID to retrieve details
  *       example:
  *         id: 1
+ *
+ *     ListStockMovementsDto:
+ *       type: object
+ *       properties:
+ *         page:
+ *           type: integer
+ *           minimum: 1
+ *           description: Page number for pagination
+ *         limit:
+ *           type: integer
+ *           minimum: 1
+ *           description: Number of items per page
+ *         search:
+ *           type: string
+ *           description: Search term for filtering results
+ *         movementType:
+ *           type: string
+ *           enum: [in, out]
+ *           description: Filter by movement type
+ *         sortBy:
+ *           type: string
+ *           description: Field to sort by
+ *         sortOrder:
+ *           type: string
+ *           enum: [asc, desc]
+ *           description: Sort order direction
+ *       example:
+ *         page: 1
+ *         limit: 10
+ *         search: "laptop"
+ *         movementType: "in"
+ *         sortBy: "createdAt"
+ *         sortOrder: "desc"
  *
  *     StockMovementResponseDto:
  *       type: object
@@ -96,4 +130,27 @@
  *         totalPages:
  *           type: integer
  *           description: Total number of pages
+ *       example:
+ *         data: [
+ *           {
+ *             id: 1,
+ *             productId: 1,
+ *             productName: "Laptop XYZ",
+ *             productSku: "SKU-123",
+ *             productSatuan: "pcs",
+ *             movementType: "in",
+ *             quantity: 10,
+ *             note: "Received new stock from supplier",
+ *             akunId: 2,
+ *             akunName: "Purchases",
+ *             storeId: 1,
+ *             storeName: "Main Store",
+ *             createdAt: "2023-08-15T08:00:00.000Z",
+ *             updatedAt: "2023-08-15T08:00:00.000Z"
+ *           }
+ *         ],
+ *         total: 50,
+ *         page: 1,
+ *         limit: 10,
+ *         totalPages: 5
  */

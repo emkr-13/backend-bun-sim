@@ -5,10 +5,6 @@
  *     UserProfileDto:
  *       type: object
  *       properties:
- *         id:
- *           type: string
- *           format: uuid
- *           description: User ID
  *         email:
  *           type: string
  *           format: email
@@ -20,16 +16,10 @@
  *           type: string
  *           format: date-time
  *           description: Account creation date
- *         updatedAt:
- *           type: string
- *           format: date-time
- *           description: Account last update date
  *       example:
- *         id: 123e4567-e89b-12d3-a456-426614174000
  *         email: user@example.com
  *         fullname: John Doe
  *         createdAt: 2023-01-01T00:00:00.000Z
- *         updatedAt: 2023-01-01T00:00:00.000Z
  *
  *     UpdateUserDto:
  *       type: object
