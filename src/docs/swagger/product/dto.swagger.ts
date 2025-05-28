@@ -15,23 +15,25 @@
  *           description: Product name
  *         description:
  *           type: string
- *           description: Product description
+ *           description: Product description (optional)
  *         categoryId:
- *           type: string
- *           format: uuid
+ *           type: integer
+ *           minimum: 1
  *           description: Category ID
  *         price:
  *           type: number
- *           description: Product selling price
+ *           minimum: 0
+ *           description: Product price
  *         satuan:
  *           type: string
+ *           enum: [pcs, box, kg]
  *           description: Unit of measurement
  *       example:
  *         name: Laptop XYZ
  *         description: High-performance laptop
- *         categoryId: 123e4567-e89b-12d3-a456-426614174000
+ *         categoryId: 1
  *         price: 1200
- *         satuan: unit
+ *         satuan: pcs
  *
  *     UpdateProductDto:
  *       type: object
@@ -39,32 +41,34 @@
  *         - id
  *       properties:
  *         id:
- *           type: string
- *           format: uuid
+ *           type: integer
+ *           minimum: 1
  *           description: Product ID
  *         name:
  *           type: string
- *           description: Product name
+ *           description: Product name (optional)
  *         description:
  *           type: string
- *           description: Product description
+ *           description: Product description (optional)
  *         categoryId:
- *           type: string
- *           format: uuid
- *           description: Category ID
+ *           type: integer
+ *           minimum: 1
+ *           description: Category ID (optional)
  *         price:
  *           type: number
- *           description: Product selling price
+ *           minimum: 0
+ *           description: Product price (optional)
  *         satuan:
  *           type: string
- *           description: Unit of measurement
+ *           enum: [pcs, box, kg]
+ *           description: Unit of measurement (optional)
  *       example:
- *         id: 123e4567-e89b-12d3-a456-426614174000
+ *         id: 1
  *         name: Laptop XYZ Pro
  *         description: Updated high-performance laptop
- *         categoryId: 123e4567-e89b-12d3-a456-426614174000
+ *         categoryId: 1
  *         price: 1500
- *         satuan: unit
+ *         satuan: pcs
  *
  *     DeleteProductDto:
  *       type: object
@@ -72,11 +76,11 @@
  *         - id
  *       properties:
  *         id:
- *           type: string
- *           format: uuid
+ *           type: integer
+ *           minimum: 1
  *           description: Product ID to delete
  *       example:
- *         id: 123e4567-e89b-12d3-a456-426614174000
+ *         id: 1
  *
  *     ProductDetailDto:
  *       type: object
@@ -84,75 +88,37 @@
  *         - id
  *       properties:
  *         id:
- *           type: string
- *           format: uuid
+ *           type: integer
+ *           minimum: 1
  *           description: Product ID to retrieve details
  *       example:
- *         id: 123e4567-e89b-12d3-a456-426614174000
+ *         id: 1
  *
- *     ProductDetail:
+ *     ProductResponse:
  *       type: object
  *       properties:
  *         id:
- *           type: string
- *           format: uuid
- *           description: Product ID
+ *           type: integer
  *         name:
  *           type: string
- *           description: Product name
  *         description:
  *           type: string
- *           description: Product description
  *         sku:
  *           type: string
- *           description: Stock Keeping Unit
  *         price_sell:
- *           type: string
- *           description: Selling price
+ *           type: number
  *         price_cost:
- *           type: string
- *           description: Cost price
+ *           type: number
  *         satuan:
  *           type: string
- *           description: Unit of measurement
+ *           enum: [pcs, box, kg]
  *         category:
  *           type: object
  *           properties:
  *             id:
- *               type: string
- *               format: uuid
+ *               type: integer
  *             name:
  *               type: string
- *         createdAt:
- *           type: string
- *           format: date-time
- *         updatedAt:
- *           type: string
- *           format: date-time
- *
- *     ProductItem:
- *       type: object
- *       properties:
- *         id:
- *           type: string
- *           format: uuid
- *         name:
- *           type: string
- *         description:
- *           type: string
- *         sku:
- *           type: string
- *         price_sell:
- *           type: string
- *         price_cost:
- *           type: string
- *         satuan:
- *           type: string
- *         categoryId:
- *           type: string
- *           format: uuid
- *         categoryName:
- *           type: string
  *         createdAt:
  *           type: string
  *           format: date-time
