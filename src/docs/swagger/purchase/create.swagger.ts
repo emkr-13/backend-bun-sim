@@ -3,7 +3,7 @@
  * /api/purchases/create:
  *   post:
  *     summary: Create a new purchase
- *     tags: [Purchase]
+ *     tags: [Purchases]
  *     security:
  *       - bearerAuth: []
  *     requestBody:

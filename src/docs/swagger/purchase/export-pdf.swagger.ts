@@ -3,7 +3,7 @@
  * /api/purchases/export-pdf:
  *   post:
  *     summary: Export purchase to PDF
- *     tags: [Purchase]
+ *     tags: [Purchases]
  *     security:
  *       - bearerAuth: []
  *     requestBody:

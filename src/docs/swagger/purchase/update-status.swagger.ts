@@ -3,7 +3,7 @@
  * /api/purchases/update-status:
  *   post:
  *     summary: Update purchase status
- *     tags: [Purchase]
+ *     tags: [Purchases]
  *     security:
  *       - bearerAuth: []
  *     requestBody:

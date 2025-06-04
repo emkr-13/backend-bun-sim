@@ -3,7 +3,7 @@
  * /api/purchases/all:
  *   get:
  *     summary: Get all purchases with pagination
- *     tags: [Purchase]
+ *     tags: [Purchases]
  *     security:
  *       - bearerAuth: []
  *     parameters:

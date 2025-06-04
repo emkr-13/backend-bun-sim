@@ -18,7 +18,7 @@ const router = Router();
 /**
  * @swagger
  * tags:
- *   name: Purchase
+ *   name: Purchases
  *   description: Purchase management endpoints
  */
 

@@ -3,7 +3,7 @@
  * /api/purchases/detail:
  *   post:
  *     summary: Get purchase by ID
- *     tags: [Purchase]
+ *     tags: [Purchases]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
