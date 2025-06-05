@@ -11,6 +11,7 @@ import {
   ValidateNested,
   ArrayMinSize,
   IsDateString,
+  ValidateIf,
 } from "class-validator";
 import { Type } from "class-transformer";
 import { purchaseStatus } from "../models/purchase";
@@ -46,11 +47,13 @@ export class CreatePurchaseDto {
   @IsDateString()
   purchaseDate!: string;
 
+  @ValidateIf((o) => !o.storeId)
   @IsNotEmpty()
   @IsNumber()
   @Min(1)
   supplierId!: number;
 
+  @ValidateIf((o) => !o.supplierId)
   @IsNotEmpty()
   @IsNumber()
   @Min(1)

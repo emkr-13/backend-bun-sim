@@ -10,6 +10,7 @@ import {
   IsEnum,
   ValidateNested,
   ArrayMinSize,
+  ValidateIf,
 } from "class-validator";
 import { Type } from "class-transformer";
 import { quotationStatus } from "../models/quotation";
@@ -49,11 +50,13 @@ export class CreateQuotationDto {
   @IsString()
   quotationDate!: string;
 
+  @ValidateIf((o) => !o.storeId)
   @IsNotEmpty()
   @IsNumber()
   @Min(1)
   customerId!: number;
 
+  @ValidateIf((o) => !o.supplierId)
   @IsNotEmpty()
   @IsNumber()
   @Min(1)
